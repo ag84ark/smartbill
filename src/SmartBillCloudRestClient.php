@@ -1,40 +1,27 @@
 <?php
 
-namespace Necenzurat\SmartBill;
+namespace Ag84ark\SmartBill;
+
+use Ag84ark\SmartBill\Resources\Invoice;
 
 class SmartBillCloudRestClient
 {
-    const INVOICE_URL = 'https://ws.smartbill.ro:8183/SBORO/api/invoice';
-
-    const STATUS_INVOICE_URL = 'https://ws.smartbill.ro:8183/SBORO/api/invoice/paymentstatus';
-
-    const PROFORMA_URL = 'https://ws.smartbill.ro:8183/SBORO/api/estimate';
-
-    const STATUS_PROFORMA_URL = 'https://ws.smartbill.ro:8183/SBORO/api/estimate/invoices';
-
-    const PAYMENT_URL = 'https://ws.smartbill.ro:8183/SBORO/api/payment';
-
-    const EMAIL_URL = 'https://ws.smartbill.ro:8183/SBORO/api/document/send';
-
-    const TAXES_URL = 'https://ws.smartbill.ro:8183/SBORO/api/tax?cif=%s';
-
-    const SERIES_URL = 'https://ws.smartbill.ro:8183/SBORO/api/series?cif=%s&type=%s';
-
-    const PRODUCTS_STOCK_URL = 'https://ws.smartbill.ro:8183/SBORO/api/stocks?cif=%s&date=%s&warehouseName=%s&productName=%s&productCode=%s';
-
-    const PARAMS_PDF = '/pdf?cif=%s&seriesname=%s&number=%s';
-
-    const PARAMS_DELETE = '?cif=%s&seriesname=%s&number=%s';
-
-    const PARAMS_DELETE_RECEIPT = '/chitanta?cif=%s&seriesname=%s&number=%s';
-
-    const PARAMS_CANCEL = '/cancel?cif=%s&seriesname=%s&number=%s';
-
-    const PARAMS_RESTORE = '/restore?cif=%s&seriesname=%s&number=%s';
-
-    const PARAMS_STATUS = '?cif=%s&seriesname=%s&number=%s';
-
-    const PARAMS_FISCAL_RECEIPT = '/text?cif=%s&id=%s';
+    const INVOICE_URL             = 'https://ws.smartbill.ro/SBORO/api/invoice';
+    const STATUS_INVOICE_URL      = 'https://ws.smartbill.ro/SBORO/api/invoice/paymentstatus';
+    const PROFORMA_URL            = 'https://ws.smartbill.ro/SBORO/api/estimate';
+    const STATUS_PROFORMA_URL     = 'https://ws.smartbill.ro/SBORO/api/estimate/invoices';
+    const PAYMENT_URL             = 'https://ws.smartbill.ro/SBORO/api/payment';
+    const EMAIL_URL               = 'https://ws.smartbill.ro/SBORO/api/document/send';
+    const TAXES_URL               = 'https://ws.smartbill.ro/SBORO/api/tax?cif=%s';
+    const SERIES_URL              = 'https://ws.smartbill.ro/SBORO/api/series?cif=%s&type=%s';
+    const PRODUCTS_STOCK_URL      = 'https://ws.smartbill.ro/SBORO/api/stocks?cif=%s&date=%s&warehouseName=%s&productName=%s&productCode=%s';
+    const PARAMS_PDF              = '/pdf?cif=%s&seriesname=%s&number=%s';
+    const PARAMS_DELETE           = '?cif=%s&seriesname=%s&number=%s';
+    const PARAMS_DELETE_RECEIPT   = '/chitanta?cif=%s&seriesname=%s&number=%s';
+    const PARAMS_CANCEL           = '/cancel?cif=%s&seriesname=%s&number=%s';
+    const PARAMS_RESTORE          = '/restore?cif=%s&seriesname=%s&number=%s';
+    const PARAMS_STATUS           = '?cif=%s&seriesname=%s&number=%s';
+    const PARAMS_FISCAL_RECEIPT   = '/text?cif=%s&id=%s';
 
     const PaymentType_OrdinPlata = 'Ordin plata';
 
@@ -116,6 +103,9 @@ class SmartBillCloudRestClient
         return $ch;
     }
 
+    /**
+     * @throws \Exception
+     */
     private function _callServer($url, $data = '', $request = '', $headAccept = 'Accept: application/json')
     {
         if (empty($url)) {
@@ -137,8 +127,6 @@ class SmartBillCloudRestClient
             }
 
             throw new \Exception($errorMessage);
-            // empty response
-            $return = '';
         } elseif (false === strpos($url, '/pdf?')) {
             $return = json_decode($return, true);
         }
@@ -156,14 +144,24 @@ class SmartBillCloudRestClient
         }
     }
 
-    public function createInvoice($data)
+    public function createInvoiceFromArray($data)
     {
         return $this->_callServer(self::INVOICE_URL, $data);
     }
 
-    public function createProforma($data)
+    public function createInvoice(Invoice $invoice)
+    {
+        return $this->createInvoiceFromArray($invoice->toArray());
+    }
+
+    public function createProformaFromArray($data)
     {
         return $this->_callServer(self::PROFORMA_URL, $data);
+    }
+
+    public function createProforma(Invoice $invoice)
+    {
+        return $this->createProformaFromArray($invoice->toArray());
     }
 
     public function createPayment($data)

@@ -10,7 +10,7 @@ Simple SmartBill API integration for Laravel.
 You can install the package via composer:
 
 ```bash
-composer require necenzurat/smartbill
+composer require ag84ark/smartbill
 ```
 
 ## Usage
@@ -61,7 +61,7 @@ $invoice = [
 echo 'Emitere factura simpla: ';
 try {
     $smartbill = new SmartBill();
-    $output = $smartbill->createInvoice($invoice); //see docs for response
+    $output = $smartbill->createInvoiceFromArray($invoice); //see docs for response
     $invoiceNumber = $output['number'];
     $invoiceSeries = $output['series'];
     echo $invoiceSeries . $invoiceNumber;

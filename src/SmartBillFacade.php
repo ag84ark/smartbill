@@ -1,12 +1,10 @@
 <?php
 
-namespace Necenzurat\SmartBill;
+namespace Ag84ark\SmartBill;
 
 use Illuminate\Support\Facades\Facade;
 
-/**
- * @see \Necenzurat\SmartBill\Skeleton\SkeletonClass
- */
+
 class SmartBillFacade extends Facade
 {
     /**

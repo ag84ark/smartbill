@@ -45,4 +45,19 @@ return [
     'proformaSeries' => 'TEST-PRO',
     'receiptSeries' => 'TEST-REC',
 
+    'defaultTaxName' => 'Normala',
+    'defaultTaxPercentage' => 19,
+    'defaultDueDays' => 30,
+    'firmaPlatitoareTVA' => true,
+    'taxNames' => [
+        'Normala', // 19%
+        'Redusa', // 9%
+        'SFDD', // 0%
+        'SDD', // 0%
+        'TVA Inclus', // 0%
+        'Taxare inversa', // 0%
+        'Redusa locuinte', // 5%
+        'Veche', // 24%
+    ],
+
 ];

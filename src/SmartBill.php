@@ -1,6 +1,6 @@
 <?php
 
-namespace Necenzurat\SmartBill;
+namespace Ag84ark\SmartBill;
 
 class SmartBill extends SmartBillCloudRestClient
 {

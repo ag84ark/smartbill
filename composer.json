@@ -1,11 +1,11 @@
 {
-    "name": "ahsanshabbir/smartbill",
+    "name": "ag84ark/smartbill",
     "description": "SmartBill API wrapper compatible for Laravel",
     "keywords": [
         "smartbill",
         "invoice"
     ],
-    "homepage": "https://github.com/necezurat/smartbill",
+    "homepage": "https://github.com/ag84ark/smartbill",
     "license": "MIT",
     "type": "library",
     "authors": [
@@ -18,25 +18,31 @@
             "name": "Ahsan Shabbir",
             "email": "ahsan.shabbir@wisevision.dev",
             "role": "Developer"
+        },
+        {
+            "name": "Cojocaru George",
+            "email": "arkangel062003@gmail.com",
+            "role": "Developer"
         }
     ],
     "require": {
-        "php" : "^7.2.5|^8.0|^8.1",
-        "illuminate/support": "~5.8.0|^6.0|^7.0|^8.0|^9.0|^10.0"
-        
+        "php" : "^7.4|^8.0|^8.1",
+        "illuminate/support": "~5.8.0|^6.0|^7.0|^8.0|^9.0|^10.0",
+        "ext-curl": "*",
+        "ext-json": "*"
     },
     "require-dev": {
         "orchestra/testbench": "3.8.*",
-        "phpunit/phpunit": "^7.0|^8.1"
+        "phpunit/phpunit": "^7.0|^8.1|^9.0|^10.0"
     },
     "autoload": {
         "psr-4": {
-            "Necenzurat\\SmartBill\\": "src"
+            "Ag84ark\\SmartBill\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Necenzurat\\SmartBill\\Tests\\": "tests"
+            "Ag84ark\\SmartBill\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -50,10 +56,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Necenzurat\\SmartBill\\SmartBillServiceProvider"
+                "Ag84ark\\SmartBill\\SmartBillServiceProvider"
             ],
             "aliases": {
-                "SmartBill": "Necenzurat\\SmartBill\\SmartBillFacade"
+                "SmartBill": "Ag84ark\\SmartBill\\SmartBillFacade"
             }
         }
     }
