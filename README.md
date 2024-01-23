@@ -1,7 +1,7 @@
 # SmartBill.ro Service Provider
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/necenzurat/smartbill.svg?style=flat-square)](https://packagist.org/packages/necenzurat/smartbill)
-[![Total Downloads](https://img.shields.io/packagist/dt/necenzurat/smartbill.svg?style=flat-square)](https://packagist.org/packages/necenzurat/smartbill)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/ag84ark/smartbill.svg?style=flat-square)](https://packagist.org/packages/ag84ark/smartbill)
+[![Total Downloads](https://img.shields.io/packagist/dt/ag84ark/smartbill.svg?style=flat-square)](https://packagist.org/packages/ag84ark/smartbill)
 
 Simple SmartBill API integration for Laravel.
 
