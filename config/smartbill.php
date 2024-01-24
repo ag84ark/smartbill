@@ -25,7 +25,8 @@ return [
     | The VAT code for the SmartBill account, you can have multiple
     | companies in SmartBill, but at the moment currently
     | one account is supported in this package
-    |
+    | As declared in SmartBill in https://cloud.smartbill.ro/core/configurare/date-firma/ under CIF
+    | EX: RO12345678
     */
     
     'vatCode' => '',
@@ -45,10 +46,19 @@ return [
     'proformaSeries' => 'TEST-PRO',
     'receiptSeries' => 'TEST-REC',
 
+    // Default tax name as in SmartBill
     'defaultTaxName' => 'Normala',
+
+    // Default VAT (TVA) percentage
     'defaultTaxPercentage' => 19,
+
+    // Default due days for invoice creation
     'defaultDueDays' => 30,
-    'firmaPlatitoareTVA' => true,
+
+    // Does the company pay VAT (TVA) or not
+    'companyPaysVAT' => true,
+
+    // Romanian tax types declared in SmartBill
     'taxNames' => [
         'Normala', // 19%
         'Redusa', // 9%

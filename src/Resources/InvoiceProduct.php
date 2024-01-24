@@ -114,7 +114,7 @@ class InvoiceProduct
 
     public function __construct()
     {
-        if( config ('smartbill.firmaPlatitoareTVA') === true)
+        if( config ('smartbill.companyPaysVAT') === true)
         {
             $this->taxName = config('smartbill.defaultTaxName');
             $this->taxPercentage = config('smartbill.defaultTaxPercentage');
