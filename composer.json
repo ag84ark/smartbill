@@ -1,6 +1,6 @@
 {
     "name": "ag84ark/smartbill",
-    "description": "SmartBill API wrapper compatible for Laravel",
+    "description": "SmartBill.ro API wrapper compatible for Laravel",
     "keywords": [
         "smartbill",
         "invoice"

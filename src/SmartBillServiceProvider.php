@@ -23,7 +23,7 @@ class SmartBillServiceProvider extends ServiceProvider
             //sdd(__DIR__);
             $this->publishes([
                 __DIR__.'/../config/smartbill.php' => config_path('smartbill.php'),
-            ], 'config');
+            ], 'laravel-smartbill-config');
 
             // Publishing the views.
             /*$this->publishes([

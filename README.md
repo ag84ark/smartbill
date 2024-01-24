@@ -3,7 +3,8 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/ag84ark/smartbill.svg?style=flat-square)](https://packagist.org/packages/ag84ark/smartbill)
 [![Total Downloads](https://img.shields.io/packagist/dt/ag84ark/smartbill.svg?style=flat-square)](https://packagist.org/packages/ag84ark/smartbill)
 
-Simple SmartBill API integration for Laravel.
+SmartBill.ro API integration for Laravel.  
+This started as a fork of from  [necenzurat/smartbill](https://github.com/necenzurat/smartbill), and now it's a standalone package.
 
 ## Installation
 
@@ -11,6 +12,11 @@ You can install the package via composer:
 
 ```bash
 composer require ag84ark/smartbill
+```
+
+You can publish the config file with:
+```bash
+php artisan vendor:publish --provider="Ag84ark\Smartbill\SmartbillServiceProvider" --tag="laravel-smartbill-config"
 ```
 
 ## Usage
@@ -72,13 +78,12 @@ try {
 
 </p>
 </details>
-see the SmartBill demo app examples: https://api.smartbill.ro/extension-files/aplicatie_demo_php.zip
 
 
 ### Testing
 
 ``` bash
-hell no
+In the making
 ```
 
 ### Changelog
@@ -91,11 +96,7 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ### Security
 
-If you discover any security related issues, please email necenzurat@gmail.com instead of using the issue tracker.
-
-## Credits
-
-- [All Contributors](../../contributors)
+If you discover any security related issues, use the issue tracker.
 
 ## License
 
