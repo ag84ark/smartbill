@@ -3,10 +3,12 @@
 namespace Ag84ark\SmartBill;
 
 use Ag84ark\SmartBill\Resources\Invoice;
+use Ag84ark\SmartBill\Resources\ReverseInvoices;
 
 class SmartBillCloudRestClient
 {
     const INVOICE_URL             = 'https://ws.smartbill.ro/SBORO/api/invoice';
+    const INVOICE_REVERSE_URL     = 'https://ws.smartbill.ro/SBORO/api/invoice/reverse';
     const STATUS_INVOICE_URL      = 'https://ws.smartbill.ro/SBORO/api/invoice/paymentstatus';
     const PROFORMA_URL            = 'https://ws.smartbill.ro/SBORO/api/estimate';
     const STATUS_PROFORMA_URL     = 'https://ws.smartbill.ro/SBORO/api/estimate/invoices';
@@ -157,6 +159,16 @@ class SmartBillCloudRestClient
     public function createProformaFromArray($data)
     {
         return $this->_callServer(self::PROFORMA_URL, $data);
+    }
+
+    public function createReverseInvoice(ReverseInvoices $reverseInvoices)
+    {
+        return $this->createReverseInvoiceFromArray($reverseInvoices->toArray());
+    }
+
+    public function createReverseInvoiceFromArray($data)
+    {
+        return $this->_callServer(self::INVOICE_REVERSE_URL, $data);
     }
 
     public function createProforma(Invoice $invoice)
