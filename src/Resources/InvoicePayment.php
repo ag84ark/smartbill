@@ -6,7 +6,6 @@ use Ag84ark\SmartBill\Exceptions\InvalidPaymentTypeException;
 
 class InvoicePayment
 {
-
     private array $paymentTypes = [
         'Chitanta',
         'Bon',
@@ -25,6 +24,11 @@ class InvoicePayment
 
     private ?string $paymentSeries = null;
 
+    public static function create(): InvoicePayment
+    {
+        return new self();
+    }
+
     public function getType(): string
     {
         return $this->type;
@@ -35,10 +39,11 @@ class InvoicePayment
      */
     public function setType(string $type): InvoicePayment
     {
-        if (!in_array($type, $this->paymentTypes)) {
+        if (! in_array($type, $this->paymentTypes)) {
             throw new InvalidPaymentTypeException($type);
         }
         $this->type = $type;
+
         return $this;
     }
 
@@ -50,6 +55,7 @@ class InvoicePayment
     public function setValue(float $value): InvoicePayment
     {
         $this->value = $value;
+
         return $this;
     }
 
@@ -61,6 +67,7 @@ class InvoicePayment
     public function setIsCash(bool $isCash): InvoicePayment
     {
         $this->isCash = $isCash;
+
         return $this;
     }
 
@@ -72,6 +79,7 @@ class InvoicePayment
     public function setPaymentSeries(?string $paymentSeries): InvoicePayment
     {
         $this->paymentSeries = $paymentSeries;
+
         return $this;
     }
 
@@ -83,8 +91,7 @@ class InvoicePayment
             'isCash' => $this->isCash,
             'paymentSeries' => $this->paymentSeries,
         ])->filter(function ($value) {
-            return !is_null($value);
+            return ! is_null($value);
         })->toArray();
     }
-
 }

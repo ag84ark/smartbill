@@ -111,14 +111,17 @@ class InvoiceProduct
      */
     private ?float $discountPercentage = null;
 
-
     public function __construct()
     {
-        if( config ('smartbill.companyPaysVAT') === true)
-        {
+        if(config('smartbill.companyPaysVAT') === true) {
             $this->taxName = config('smartbill.defaultTaxName');
             $this->taxPercentage = config('smartbill.defaultTaxPercentage');
         }
+    }
+
+    public static function create(): self
+    {
+        return new self();
     }
 
     /** Returns array without null values */
@@ -143,11 +146,11 @@ class InvoiceProduct
             'warehouseName' => $this->warehouseName,
             'isService' => $this->isService,
         ])->filter(function ($value) {
-            return !is_null($value);
+            return ! is_null($value);
         })->toArray();
     }
 
-    public static function fromArray($data) :self
+    public static function fromArray($data): self
     {
         $product = new self();
         $product->setName($data['name'])
@@ -171,7 +174,6 @@ class InvoiceProduct
         return $product;
     }
 
-
     /**
      * Creeaza un discount
      *
@@ -190,10 +192,9 @@ class InvoiceProduct
         int $discountType = 2,
         float $discountValue = 0,
         float $discountPercentage = 0,
-        string $measuringUnitName = 'buc' ,
+        string $measuringUnitName = 'buc',
         string $currency = 'RON'
-    ) :self
-    {
+    ): self {
         $product = new self();
         $product->setIsDiscount(true);
         $product->setName($name);
@@ -216,6 +217,7 @@ class InvoiceProduct
     public function setName(string $name): InvoiceProduct
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -227,6 +229,7 @@ class InvoiceProduct
     public function setCode(?string $code): InvoiceProduct
     {
         $this->code = $code;
+
         return $this;
     }
 
@@ -238,6 +241,7 @@ class InvoiceProduct
     public function setProductDescription(?string $productDescription): InvoiceProduct
     {
         $this->productDescription = $productDescription;
+
         return $this;
     }
 
@@ -249,6 +253,7 @@ class InvoiceProduct
     public function setTranslatedName(?string $translatedName): InvoiceProduct
     {
         $this->translatedName = $translatedName;
+
         return $this;
     }
 
@@ -260,6 +265,7 @@ class InvoiceProduct
     public function setTranslatedMeasuringUnit(?string $translatedMeasuringUnit): InvoiceProduct
     {
         $this->translatedMeasuringUnit = $translatedMeasuringUnit;
+
         return $this;
     }
 
@@ -271,6 +277,7 @@ class InvoiceProduct
     public function setIsDiscount(bool $isDiscount): InvoiceProduct
     {
         $this->isDiscount = $isDiscount;
+
         return $this;
     }
 
@@ -282,6 +289,7 @@ class InvoiceProduct
     public function setMeasuringUnitName(string $measuringUnitName): InvoiceProduct
     {
         $this->measuringUnitName = $measuringUnitName;
+
         return $this;
     }
 
@@ -293,6 +301,7 @@ class InvoiceProduct
     public function setCurrency(string $currency): InvoiceProduct
     {
         $this->currency = $currency;
+
         return $this;
     }
 
@@ -304,6 +313,7 @@ class InvoiceProduct
     public function setQuantity(float $quantity): InvoiceProduct
     {
         $this->quantity = $quantity;
+
         return $this;
     }
 
@@ -315,6 +325,7 @@ class InvoiceProduct
     public function setPrice(float $price): InvoiceProduct
     {
         $this->price = $price;
+
         return $this;
     }
 
@@ -326,6 +337,7 @@ class InvoiceProduct
     public function setIsTaxIncluded(bool $isTaxIncluded): InvoiceProduct
     {
         $this->isTaxIncluded = $isTaxIncluded;
+
         return $this;
     }
 
@@ -339,11 +351,11 @@ class InvoiceProduct
      */
     public function setTaxName(?string $taxName): InvoiceProduct
     {
-        if(!$taxName && !in_array($taxName, config('smartbill.taxNames')))
-        {
+        if(! $taxName && ! in_array($taxName, config('smartbill.taxNames'))) {
             throw new InvalidTaxNameException($taxName);
         }
         $this->taxName = $taxName;
+
         return $this;
     }
 
@@ -355,6 +367,7 @@ class InvoiceProduct
     public function setTaxPercentage(?float $taxPercentage): InvoiceProduct
     {
         $this->taxPercentage = $taxPercentage;
+
         return $this;
     }
 
@@ -366,6 +379,7 @@ class InvoiceProduct
     public function setExchangeRate(?float $exchangeRate): InvoiceProduct
     {
         $this->exchangeRate = $exchangeRate;
+
         return $this;
     }
 
@@ -377,6 +391,7 @@ class InvoiceProduct
     public function setSaveToDb(bool $saveToDb): InvoiceProduct
     {
         $this->saveToDb = $saveToDb;
+
         return $this;
     }
 
@@ -388,6 +403,7 @@ class InvoiceProduct
     public function setWarehouseName(?string $warehouseName): InvoiceProduct
     {
         $this->warehouseName = $warehouseName;
+
         return $this;
     }
 
@@ -399,6 +415,7 @@ class InvoiceProduct
     public function setIsService(bool $isService): InvoiceProduct
     {
         $this->isService = $isService;
+
         return $this;
     }
 
@@ -410,6 +427,7 @@ class InvoiceProduct
     public function setNumberOfItems(?int $numberOfItems): InvoiceProduct
     {
         $this->numberOfItems = $numberOfItems;
+
         return $this;
     }
 
@@ -421,6 +439,7 @@ class InvoiceProduct
     public function setDiscountType(?int $discountType): InvoiceProduct
     {
         $this->discountType = $discountType;
+
         return $this;
     }
 
@@ -431,12 +450,12 @@ class InvoiceProduct
 
     public function setDiscountValue(?float $discountValue): InvoiceProduct
     {
-        if($discountValue > 0)
-        {
+        if($discountValue > 0) {
             $discountValue = -$discountValue;
         }
 
         $this->discountValue = $discountValue;
+
         return $this;
     }
 
@@ -448,8 +467,7 @@ class InvoiceProduct
     public function setDiscountPercentage(?float $discountPercentage): InvoiceProduct
     {
         $this->discountPercentage = $discountPercentage;
+
         return $this;
     }
-
-
 }

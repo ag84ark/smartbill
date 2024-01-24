@@ -1,0 +1,11 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Dead catch \\- Exception is never thrown in the try block\\.$#"
+			count: 1
+			path: src/SmartBillCloudRestClient.php
+
+		-
+			message: "#^If condition is always false\\.$#"
+			count: 1
+			path: src/SmartBillCloudRestClient.php

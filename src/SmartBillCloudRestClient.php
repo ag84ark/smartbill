@@ -3,65 +3,66 @@
 namespace Ag84ark\SmartBill;
 
 use Ag84ark\SmartBill\Resources\Invoice;
+use Ag84ark\SmartBill\Resources\Payment;
 use Ag84ark\SmartBill\Resources\ReverseInvoices;
 
 class SmartBillCloudRestClient
 {
-    const INVOICE_URL             = 'https://ws.smartbill.ro/SBORO/api/invoice';
-    const INVOICE_REVERSE_URL     = 'https://ws.smartbill.ro/SBORO/api/invoice/reverse';
-    const STATUS_INVOICE_URL      = 'https://ws.smartbill.ro/SBORO/api/invoice/paymentstatus';
-    const PROFORMA_URL            = 'https://ws.smartbill.ro/SBORO/api/estimate';
-    const STATUS_PROFORMA_URL     = 'https://ws.smartbill.ro/SBORO/api/estimate/invoices';
-    const PAYMENT_URL             = 'https://ws.smartbill.ro/SBORO/api/payment';
-    const EMAIL_URL               = 'https://ws.smartbill.ro/SBORO/api/document/send';
-    const TAXES_URL               = 'https://ws.smartbill.ro/SBORO/api/tax?cif=%s';
-    const SERIES_URL              = 'https://ws.smartbill.ro/SBORO/api/series?cif=%s&type=%s';
-    const PRODUCTS_STOCK_URL      = 'https://ws.smartbill.ro/SBORO/api/stocks?cif=%s&date=%s&warehouseName=%s&productName=%s&productCode=%s';
-    const PARAMS_PDF              = '/pdf?cif=%s&seriesname=%s&number=%s';
-    const PARAMS_DELETE           = '?cif=%s&seriesname=%s&number=%s';
-    const PARAMS_DELETE_RECEIPT   = '/chitanta?cif=%s&seriesname=%s&number=%s';
-    const PARAMS_CANCEL           = '/cancel?cif=%s&seriesname=%s&number=%s';
-    const PARAMS_RESTORE          = '/restore?cif=%s&seriesname=%s&number=%s';
-    const PARAMS_STATUS           = '?cif=%s&seriesname=%s&number=%s';
-    const PARAMS_FISCAL_RECEIPT   = '/text?cif=%s&id=%s';
+    public const INVOICE_URL = 'https://ws.smartbill.ro/SBORO/api/invoice';
+    public const INVOICE_REVERSE_URL = 'https://ws.smartbill.ro/SBORO/api/invoice/reverse';
+    public const STATUS_INVOICE_URL = 'https://ws.smartbill.ro/SBORO/api/invoice/paymentstatus';
+    public const PROFORMA_URL = 'https://ws.smartbill.ro/SBORO/api/estimate';
+    public const STATUS_PROFORMA_URL = 'https://ws.smartbill.ro/SBORO/api/estimate/invoices';
+    public const PAYMENT_URL = 'https://ws.smartbill.ro/SBORO/api/payment';
+    public const EMAIL_URL = 'https://ws.smartbill.ro/SBORO/api/document/send';
+    public const TAXES_URL = 'https://ws.smartbill.ro/SBORO/api/tax?cif=%s';
+    public const SERIES_URL = 'https://ws.smartbill.ro/SBORO/api/series?cif=%s&type=%s';
+    public const PRODUCTS_STOCK_URL = 'https://ws.smartbill.ro/SBORO/api/stocks?cif=%s&date=%s&warehouseName=%s&productName=%s&productCode=%s';
+    public const PARAMS_PDF = '/pdf?cif=%s&seriesname=%s&number=%s';
+    public const PARAMS_DELETE = '?cif=%s&seriesname=%s&number=%s';
+    public const PARAMS_DELETE_RECEIPT = '/chitanta?cif=%s&seriesname=%s&number=%s';
+    public const PARAMS_CANCEL = '/cancel?cif=%s&seriesname=%s&number=%s';
+    public const PARAMS_RESTORE = '/restore?cif=%s&seriesname=%s&number=%s';
+    public const PARAMS_STATUS = '?cif=%s&seriesname=%s&number=%s';
+    public const PARAMS_FISCAL_RECEIPT = '/text?cif=%s&id=%s';
 
-    const PaymentType_OrdinPlata = 'Ordin plata';
+    public const PaymentType_OrdinPlata = 'Ordin plata';
 
-    const PaymentType_Chitanta = 'Chitanta';
+    public const PaymentType_Chitanta = 'Chitanta';
 
-    const PaymentType_Card = 'Card';
+    public const PaymentType_Card = 'Card';
 
-    const PaymentType_CEC = 'CEC';
+    public const PaymentType_CEC = 'CEC';
 
-    const PaymentType_BiletOrdin = 'Bilet ordin';
+    public const PaymentType_BiletOrdin = 'Bilet ordin';
 
-    const PaymentType_MandatPostal = 'Mandat postal';
+    public const PaymentType_MandatPostal = 'Mandat postal';
 
-    const PaymentType_Other = 'Alta incasare';
+    public const PaymentType_Other = 'Alta incasare';
 
-    const PaymentType_BonFiscal = 'Bon';
+    public const PaymentType_BonFiscal = 'Bon';
 
-    const DiscountType_Valoric = 1;
+    public const DiscountType_Valoric = 1;
 
-    const DiscountType_Value = 1; // en
+    public const DiscountType_Value = 1; // en
 
-    const DiscountType_Procentual = 2;
+    public const DiscountType_Procentual = 2;
 
-    const DiscountType_Percent = 2; // en
+    public const DiscountType_Percent = 2; // en
 
-    const DocumentType_Invoice = 'factura'; // en
+    public const DocumentType_Invoice = 'factura'; // en
 
-    const DocumentType_Factura = 'factura';
+    public const DocumentType_Factura = 'factura';
 
-    const DocumentType_Proforma = 'proforma';
+    public const DocumentType_Proforma = 'proforma';
 
-    const DocumentType_Receipt = 'chitanta'; // en
+    public const DocumentType_Receipt = 'chitanta'; // en
 
-    const DocumentType_Chitanta = 'chitanta';
+    public const DocumentType_Chitanta = 'chitanta';
 
-    const DEBUG_ON_ERROR = false; // use this only in development phase; DON'T USE IN PRODUCTION !!!
+    public const DEBUG_ON_ERROR = false; // use this only in development phase; DON'T USE IN PRODUCTION !!!
 
-    private $hash = '';
+    private string $hash = '';
 
     public function __construct($user, $token)
     {
@@ -93,7 +94,7 @@ class SmartBillCloudRestClient
 
         // debugging
         $isDebug = self::DEBUG_ON_ERROR;
-        if (! empty($isDebug)) {
+        if ($isDebug) {
             $debug = [
                 'URL: ' => $url,
                 'data: ' => $data,
@@ -146,7 +147,7 @@ class SmartBillCloudRestClient
         }
     }
 
-    public function createInvoiceFromArray($data)
+    public function createInvoiceFromArray(array $data)
     {
         return $this->_callServer(self::INVOICE_URL, $data);
     }
@@ -156,7 +157,7 @@ class SmartBillCloudRestClient
         return $this->createInvoiceFromArray($invoice->toArray());
     }
 
-    public function createProformaFromArray($data)
+    public function createProformaFromArray(array $data)
     {
         return $this->_callServer(self::PROFORMA_URL, $data);
     }
@@ -166,7 +167,7 @@ class SmartBillCloudRestClient
         return $this->createReverseInvoiceFromArray($reverseInvoices->toArray());
     }
 
-    public function createReverseInvoiceFromArray($data)
+    public function createReverseInvoiceFromArray(array $data)
     {
         return $this->_callServer(self::INVOICE_REVERSE_URL, $data);
     }
@@ -176,9 +177,14 @@ class SmartBillCloudRestClient
         return $this->createProformaFromArray($invoice->toArray());
     }
 
-    public function createPayment($data)
+    public function createPaymentFromArray(array $data)
     {
         return $this->_callServer(self::PAYMENT_URL, $data);
+    }
+
+    public function createPayment(Payment $payment)
+    {
+        return $this->createPaymentFromArray($payment->toArray());
     }
 
     public function PDFInvoice($companyVatCode, $seriesName, $number)
@@ -308,6 +314,7 @@ class SmartBillCloudRestClient
     {
         $url = sprintf(self::PAYMENT_URL.self::PARAMS_FISCAL_RECEIPT, $companyVatCode, $id);
         $text = $this->_callServer($url);
+
         try {
             $text = base64_decode($text['message']);
         } catch (\Exception $ex) {
@@ -322,6 +329,7 @@ class SmartBillCloudRestClient
         self::_validateProductsStock($data);
         $url = self::_urlProductsStock($data);
         $list = $this->_callServer($url);
+
         try {
             $list = $list['list'];
         } catch (\Exception $ex) {

@@ -2,7 +2,6 @@
 
 namespace Ag84ark\SmartBill\Resources;
 
-
 use Ag84ark\SmartBill\Exceptions\InvalidDateException;
 use Ag84ark\SmartBill\Helpers\DateHelper;
 
@@ -42,6 +41,7 @@ class ReverseInvoices
     public function setCompanyVatCode(string $companyVatCode): ReverseInvoices
     {
         $this->companyVatCode = $companyVatCode;
+
         return $this;
     }
 
@@ -53,6 +53,7 @@ class ReverseInvoices
     public function setSeriesName(string $seriesName): ReverseInvoices
     {
         $this->seriesName = $seriesName;
+
         return $this;
     }
 
@@ -64,6 +65,7 @@ class ReverseInvoices
     public function setNumber(string $number): ReverseInvoices
     {
         $this->number = $number;
+
         return $this;
     }
 
@@ -78,8 +80,7 @@ class ReverseInvoices
     public function setIssueDate(string $issueDate): ReverseInvoices
     {
         $this->issueDate = DateHelper::getYMD($issueDate);
+
         return $this;
     }
-
-
 }

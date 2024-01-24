@@ -4,7 +4,6 @@ namespace Ag84ark\SmartBill;
 
 use Illuminate\Support\Facades\Facade;
 
-
 class SmartBillFacade extends Facade
 {
     /**

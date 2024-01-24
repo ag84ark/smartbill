@@ -16,9 +16,10 @@ class DateHelper
      */
     public static function getYMD(string $date): string
     {
-        if (!self::isValidDate($date)) {
+        if (! self::isValidDate($date)) {
             throw new InvalidDateException($date);
         }
+
         return date('Y-m-d', strtotime($date));
     }
 }

@@ -16,6 +16,7 @@ class InvoiceSendEmailDetails
     public function setTo(?string $to): InvoiceSendEmailDetails
     {
         $this->to = $to;
+
         return $this;
     }
 
@@ -27,6 +28,7 @@ class InvoiceSendEmailDetails
     public function setCc(?string $cc): InvoiceSendEmailDetails
     {
         $this->cc = $cc;
+
         return $this;
     }
 
@@ -38,6 +40,7 @@ class InvoiceSendEmailDetails
     public function setBcc(?string $bcc): InvoiceSendEmailDetails
     {
         $this->bcc = $bcc;
+
         return $this;
     }
 
@@ -48,8 +51,7 @@ class InvoiceSendEmailDetails
             'cc' => $this->cc,
             'bcc' => $this->bcc,
         ])->filter(function ($value) {
-            return !is_null($value);
+            return ! is_null($value);
         })->toArray();
     }
-
 }

@@ -55,7 +55,7 @@ class SmartBillServiceProvider extends ServiceProvider
 
         // Register the main class to use with the facade
         $this->app->singleton('smartbill', function () {
-            return new SmartBill;
+            return new SmartBill();
         });
     }
 }

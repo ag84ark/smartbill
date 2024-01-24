@@ -2,7 +2,7 @@
 
 namespace Ag84ark\SmartBill\Resources;
 
-class InvoiceClient
+class Client
 {
     /** Nume client (caracterele speciale nu sunt permise ) */
     private string $name;
@@ -52,7 +52,6 @@ class InvoiceClient
     /** salvare client in baza de date */
     private bool $saveToDb = false;
 
-
     /** Returns array without null values */
     public function toArray(): array
     {
@@ -73,7 +72,7 @@ class InvoiceClient
             'contact' => $this->contact,
             'code' => $this->code,
         ])->filter(function ($value) {
-            return !is_null($value);
+            return ! is_null($value);
         })->toArray();
     }
 
@@ -104,9 +103,10 @@ class InvoiceClient
         return $this->name;
     }
 
-    public function setName(string $name): InvoiceClient
+    public function setName(string $name): Client
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -115,9 +115,10 @@ class InvoiceClient
         return $this->vatCode;
     }
 
-    public function setVatCode(?string $vatCode): InvoiceClient
+    public function setVatCode(?string $vatCode): Client
     {
         $this->vatCode = $vatCode;
+
         return $this;
     }
 
@@ -126,9 +127,10 @@ class InvoiceClient
         return $this->isTaxPayer;
     }
 
-    public function setIsTaxPayer(bool $isTaxPayer): InvoiceClient
+    public function setIsTaxPayer(bool $isTaxPayer): Client
     {
         $this->isTaxPayer = $isTaxPayer;
+
         return $this;
     }
 
@@ -137,9 +139,10 @@ class InvoiceClient
         return $this->regCom;
     }
 
-    public function setRegCom(?string $regCom): InvoiceClient
+    public function setRegCom(?string $regCom): Client
     {
         $this->regCom = $regCom;
+
         return $this;
     }
 
@@ -148,9 +151,10 @@ class InvoiceClient
         return $this->address;
     }
 
-    public function setAddress(?string $address): InvoiceClient
+    public function setAddress(?string $address): Client
     {
         $this->address = $address;
+
         return $this;
     }
 
@@ -159,9 +163,10 @@ class InvoiceClient
         return $this->city;
     }
 
-    public function setCity(?string $city): InvoiceClient
+    public function setCity(?string $city): Client
     {
         $this->city = $city;
+
         return $this;
     }
 
@@ -170,9 +175,10 @@ class InvoiceClient
         return $this->country;
     }
 
-    public function setCountry(?string $country): InvoiceClient
+    public function setCountry(?string $country): Client
     {
         $this->country = $country;
+
         return $this;
     }
 
@@ -181,9 +187,10 @@ class InvoiceClient
         return $this->email;
     }
 
-    public function setEmail(?string $email): InvoiceClient
+    public function setEmail(?string $email): Client
     {
         $this->email = $email;
+
         return $this;
     }
 
@@ -192,9 +199,10 @@ class InvoiceClient
         return $this->saveToDb;
     }
 
-    public function setSaveToDb(bool $saveToDb): InvoiceClient
+    public function setSaveToDb(bool $saveToDb): Client
     {
         $this->saveToDb = $saveToDb;
+
         return $this;
     }
 
@@ -208,9 +216,10 @@ class InvoiceClient
         return $this->code;
     }
 
-    public function setCode(?string $code): InvoiceClient
+    public function setCode(?string $code): Client
     {
         $this->code = $code;
+
         return $this;
     }
 
@@ -219,9 +228,10 @@ class InvoiceClient
         return $this->contact;
     }
 
-    public function setContact(?string $contact): InvoiceClient
+    public function setContact(?string $contact): Client
     {
         $this->contact = $contact;
+
         return $this;
     }
 
@@ -230,9 +240,10 @@ class InvoiceClient
         return $this->county;
     }
 
-    public function setCounty(?string $county): InvoiceClient
+    public function setCounty(?string $county): Client
     {
         $this->county = $county;
+
         return $this;
     }
 
@@ -241,9 +252,10 @@ class InvoiceClient
         return $this->phone;
     }
 
-    public function setPhone(?string $phone): InvoiceClient
+    public function setPhone(?string $phone): Client
     {
         $this->phone = $phone;
+
         return $this;
     }
 
@@ -252,9 +264,10 @@ class InvoiceClient
         return $this->iban;
     }
 
-    public function setIban(?string $iban): InvoiceClient
+    public function setIban(?string $iban): Client
     {
         $this->iban = $iban;
+
         return $this;
     }
 
@@ -263,9 +276,10 @@ class InvoiceClient
         return $this->bank;
     }
 
-    public function setBank(?string $bank): InvoiceClient
+    public function setBank(?string $bank): Client
     {
         $this->bank = $bank;
+
         return $this;
     }
 }

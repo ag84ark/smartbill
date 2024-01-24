@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 class Invoice
 {
     private string $companyVatCode;
-    private InvoiceClient $client;
+    private Client $client;
 
     /** Incasarea facturii la emitere */
     private ?InvoicePayment $payment = null;
@@ -103,23 +103,25 @@ class Invoice
         $this->issueDate = date('Y-m-d');
     }
 
-    public static function create(): Invoice
+    public static function create(): self
     {
         return new self();
     }
 
-    public static function createProforma(string $number): Invoice
+    public static function createProforma(string $number): self
     {
         $invoice = new self();
         $invoice->seriesName = config('smartbill.proformaSeries');
         $invoice->number = $number;
+
         return $invoice;
     }
 
-    public static function createDraft(): Invoice
+    public static function createDraft(): self
     {
         $invoice = new self();
         $invoice->isDraft = true;
+
         return $invoice;
     }
 
@@ -166,7 +168,7 @@ class Invoice
                 return $product->toArray();
             })->toArray(),
         ])->filter(function ($value) {
-            return !is_null($value);
+            return ! is_null($value);
         })->toArray();
     }
 
@@ -178,17 +180,19 @@ class Invoice
     public function setCompanyVatCode(string $companyVatCode): Invoice
     {
         $this->companyVatCode = $companyVatCode;
+
         return $this;
     }
 
-    public function getClient(): InvoiceClient
+    public function getClient(): Client
     {
         return $this->client;
     }
 
-    public function setClient(InvoiceClient $client): Invoice
+    public function setClient(Client $client): Invoice
     {
         $this->client = $client;
+
         return $this;
     }
 
@@ -200,6 +204,7 @@ class Invoice
     public function setPayment(?InvoicePayment $payment): Invoice
     {
         $this->payment = $payment;
+
         return $this;
     }
 
@@ -214,6 +219,7 @@ class Invoice
     public function setIssueDate(string $issueDate): Invoice
     {
         $this->issueDate = DateHelper::getYMD($issueDate);
+
         return $this;
     }
 
@@ -225,6 +231,7 @@ class Invoice
     public function setSeriesName(string $seriesName): Invoice
     {
         $this->seriesName = $seriesName;
+
         return $this;
     }
 
@@ -239,6 +246,7 @@ class Invoice
     public function setDueDate(string $dueDate): Invoice
     {
         $this->dueDate = DateHelper::getYMD($dueDate);
+
         return $this;
     }
 
@@ -253,6 +261,7 @@ class Invoice
     public function setDeliveryDate(?string $deliveryDate): Invoice
     {
         $this->deliveryDate = $deliveryDate ? DateHelper::getYMD($deliveryDate) : null;
+
         return $this;
     }
 
@@ -264,6 +273,7 @@ class Invoice
     public function setIsDraft(bool $isDraft): Invoice
     {
         $this->isDraft = $isDraft;
+
         return $this;
     }
 
@@ -275,6 +285,7 @@ class Invoice
     public function setCurrency(string $currency): Invoice
     {
         $this->currency = $currency;
+
         return $this;
     }
 
@@ -286,6 +297,7 @@ class Invoice
     public function setExchangeRate(float $exchangeRate): Invoice
     {
         $this->exchangeRate = $exchangeRate;
+
         return $this;
     }
 
@@ -297,6 +309,7 @@ class Invoice
     public function setLanguage(string $language): Invoice
     {
         $this->language = $language;
+
         return $this;
     }
 
@@ -307,11 +320,12 @@ class Invoice
 
     public function setPrecision(int $precision): Invoice
     {
-        if(!in_array($precision, [2, 3, 4])) {
+        if(! in_array($precision, [2, 3, 4])) {
             throw new \InvalidArgumentException('Precision must be 2, 3 or 4');
         }
 
         $this->precision = $precision;
+
         return $this;
     }
 
@@ -323,6 +337,7 @@ class Invoice
     public function setIssuerCnp(?string $issuerCnp): Invoice
     {
         $this->issuerCnp = $issuerCnp;
+
         return $this;
     }
 
@@ -334,6 +349,7 @@ class Invoice
     public function setIssuerName(?string $issuerName): Invoice
     {
         $this->issuerName = $issuerName;
+
         return $this;
     }
 
@@ -345,6 +361,7 @@ class Invoice
     public function setAviz(?string $aviz): Invoice
     {
         $this->aviz = $aviz;
+
         return $this;
     }
 
@@ -356,6 +373,7 @@ class Invoice
     public function setMentions(?string $mentions): Invoice
     {
         $this->mentions = $mentions;
+
         return $this;
     }
 
@@ -367,6 +385,7 @@ class Invoice
     public function setObservations(?string $observations): Invoice
     {
         $this->observations = $observations;
+
         return $this;
     }
 
@@ -378,6 +397,7 @@ class Invoice
     public function setDelegateName(?string $delegateName): Invoice
     {
         $this->delegateName = $delegateName;
+
         return $this;
     }
 
@@ -389,6 +409,7 @@ class Invoice
     public function setDelegateIdentityCard(?string $delegateIdentityCard): Invoice
     {
         $this->delegateIdentityCard = $delegateIdentityCard;
+
         return $this;
     }
 
@@ -400,6 +421,7 @@ class Invoice
     public function setDelegateAuto(?string $delegateAuto): Invoice
     {
         $this->delegateAuto = $delegateAuto;
+
         return $this;
     }
 
@@ -414,6 +436,7 @@ class Invoice
     public function setPaymentDate(?string $paymentDate): Invoice
     {
         $this->paymentDate = $paymentDate ? DateHelper::getYMD($paymentDate) : null;
+
         return $this;
     }
 
@@ -425,6 +448,7 @@ class Invoice
     public function setUseStock(bool $useStock): Invoice
     {
         $this->useStock = $useStock;
+
         return $this;
     }
 
@@ -436,6 +460,7 @@ class Invoice
     public function setUseEstimateDetails(bool $useEstimateDetails): Invoice
     {
         $this->useEstimateDetails = $useEstimateDetails;
+
         return $this;
     }
 
@@ -447,6 +472,7 @@ class Invoice
     public function setUsePaymentTax(bool $usePaymentTax): Invoice
     {
         $this->usePaymentTax = $usePaymentTax;
+
         return $this;
     }
 
@@ -458,6 +484,7 @@ class Invoice
     public function setPaymentBase(float $paymentBase): Invoice
     {
         $this->paymentBase = $paymentBase;
+
         return $this;
     }
 
@@ -469,6 +496,7 @@ class Invoice
     public function setColectedTax(float $colectedTax): Invoice
     {
         $this->colectedTax = $colectedTax;
+
         return $this;
     }
 
@@ -480,6 +508,7 @@ class Invoice
     public function setPaymentTotal(float $paymentTotal): Invoice
     {
         $this->paymentTotal = $paymentTotal;
+
         return $this;
     }
 
@@ -491,6 +520,7 @@ class Invoice
     public function setPaymentUrl(?string $paymentUrl): Invoice
     {
         $this->paymentUrl = $paymentUrl;
+
         return $this;
     }
 
@@ -502,6 +532,7 @@ class Invoice
     public function setNumber(?string $number): Invoice
     {
         $this->number = $number;
+
         return $this;
     }
 
@@ -513,6 +544,7 @@ class Invoice
     public function setSendEmail(bool $sendEmail): Invoice
     {
         $this->sendEmail = $sendEmail;
+
         return $this;
     }
 
@@ -524,6 +556,7 @@ class Invoice
     public function setEmail(?InvoiceSendEmailDetails $email): Invoice
     {
         $this->email = $email;
+
         return $this;
     }
 
@@ -535,8 +568,7 @@ class Invoice
     public function setProducts(Collection $products): Invoice
     {
         $this->products = $products;
+
         return $this;
     }
-
 }
-
