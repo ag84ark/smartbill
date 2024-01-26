@@ -98,7 +98,7 @@ class Invoice
     {
         $this->companyVatCode = config('smartbill.vatCode');
         $this->seriesName = config('smartbill.invoiceSeries');
-        $this->dueDate = date('Y-m-d', time() + config('smartbill.defaultDueDays') * 3600);
+        $this->dueDate = date('Y-m-d', time() + config('smartbill.defaultDueDays') * 86400);
         $this->products = collect();
         $this->issueDate = date('Y-m-d');
     }
