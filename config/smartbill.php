@@ -14,8 +14,8 @@ return [
     |
     */
 
-    'username' => '',
-    'token' => '',
+    'username' => env('SMARTBILL_USERNAME', ''),
+    'token' => env('SMARTBILL_TOKEN', ''),
 
     /*
     |--------------------------------------------------------------------------
@@ -29,7 +29,7 @@ return [
     | EX: RO12345678
     */
     
-    'vatCode' => '',
+    'vatCode' => env('SMARTBILL_VAT_CODE', ''),
 
     /*
     |--------------------------------------------------------------------------
@@ -42,21 +42,21 @@ return [
     |
     */
 
-    'invoiceSeries' => 'TEST-INV',
-    'proformaSeries' => 'TEST-PRO',
-    'receiptSeries' => 'TEST-REC',
+    'invoiceSeries' => env('SMARTBILL_INVOICE_SERIES', 'TEST-INV'),
+    'proformaSeries' => env('SMARTBILL_PROFORMA_SERIES', 'TEST-PRO'),
+    'receiptSeries' => env('SMARTBILL_RECEIPT_SERIES', 'TEST-REC'),
 
     // Default tax name as in SmartBill
-    'defaultTaxName' => 'Normala',
+    'defaultTaxName' => env('SMARTBILL_DEFAULT_TAX_NAME', 'Normala'),
 
     // Default VAT (TVA) percentage
-    'defaultTaxPercentage' => 19,
+    'defaultTaxPercentage' => env('SMARTBILL_DEFAULT_TAX_PERCENTAGE', 19),
 
     // Default due days for invoice creation
-    'defaultDueDays' => 30,
+    'defaultDueDays' => env('SMARTBILL_DEFAULT_DUE_DAYS', 30),
 
     // Does the company pay VAT (TVA) or not
-    'companyPaysVAT' => true,
+    'companyPaysVAT' => env('SMARTBILL_COMPANY_PAYS_VAT', true),
 
     // Romanian tax types declared in SmartBill
     'taxNames' => [
