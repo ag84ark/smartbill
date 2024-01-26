@@ -16,7 +16,7 @@ composer require ag84ark/smartbill
 
 You can publish the config file with:
 ```bash
-php artisan vendor:publish --provider="Ag84ark\Smartbill\SmartbillServiceProvider" --tag="laravel-smartbill-config"
+php artisan vendor:publish --provider="Ag84ark\SmartBill\SmartBillServiceProvider" --tag="laravel-smartbill-config"
 ```
 
 ## Usage
