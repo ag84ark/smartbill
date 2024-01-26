@@ -39,7 +39,7 @@ class InvoiceProduct
      *
      * se va folosi pretul per unitate cu/fara TVA in functie de valoarea parametrului isTaxIncluded
      */
-    private float $price;
+    private ?float $price = null;
 
     /** true - pretul produsului contine TVA
      * false - pretul produsului nu contine TVA
@@ -101,7 +101,7 @@ class InvoiceProduct
      *
      * valoarea trebuie sa fie negativa
      * este obligatoriu doar daca discountul este de tip valoric
-    */
+     */
     private ?float $discountValue = null;
 
     /** procent discount daca discountType este 2
@@ -145,6 +145,10 @@ class InvoiceProduct
             'saveToDb' => $this->saveToDb,
             'warehouseName' => $this->warehouseName,
             'isService' => $this->isService,
+            'numberOfItems' => $this->numberOfItems,
+            'discountType' => $this->discountType,
+            'discountValue' => $this->discountValue,
+            'discountPercentage' => $this->discountPercentage,
         ])->filter(function ($value) {
             return ! is_null($value);
         })->toArray();
@@ -190,8 +194,8 @@ class InvoiceProduct
         string $name,
         int $numberOfItems,
         int $discountType = 2,
-        float $discountValue = 0,
-        float $discountPercentage = 0,
+        ?float $discountValue = null,
+        ?float $discountPercentage = null,
         string $measuringUnitName = 'buc',
         string $currency = 'RON'
     ): self {
@@ -207,6 +211,42 @@ class InvoiceProduct
 
         return $product;
 
+    }
+
+    public static function makeValoricDiscountItem(
+        string $name,
+        float $discountValue,
+        int $numberOfItems = 1,
+        string $measuringUnitName = 'buc',
+        string $currency = 'RON'
+    ): self {
+        return self::makeDiscountItem(
+            $name,
+            $numberOfItems,
+            1,
+            $discountValue,
+            null,
+            $measuringUnitName,
+            $currency
+        );
+    }
+
+    public static function makePercentageDiscountItem(
+        string $name,
+        float $discountPercentage,
+        int $numberOfItems = 1,
+        string $measuringUnitName = 'buc',
+        string $currency = 'RON'
+    ): self {
+        return self::makeDiscountItem(
+            $name,
+            $numberOfItems,
+            2,
+            null,
+            $discountPercentage,
+            $measuringUnitName,
+            $currency
+        );
     }
 
     public function getName(): string
@@ -317,7 +357,7 @@ class InvoiceProduct
         return $this;
     }
 
-    public function getPrice(): float
+    public function getPrice(): ?float
     {
         return $this->price;
     }
