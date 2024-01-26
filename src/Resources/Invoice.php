@@ -16,7 +16,7 @@ class Invoice
     private string $issueDate;
     private string $seriesName;
     private string $dueDate;
-    private ?string $deliveryDate;
+    private ?string $deliveryDate = null;
 
     private bool $isDraft = false;
 

@@ -18,7 +18,7 @@ class InvoiceProduct
      * Se foloseste pentru introducerea pe factura a unei descrieri pentru produse/servicii
      * se poate folosi Enter pentru introducerea unei descrieri pe mai multe linii
      * */
-    private ?string $productDescription;
+    private ?string $productDescription = null;
 
     /** numele produsului tradus */
     private ?string $translatedName = null;
@@ -33,7 +33,7 @@ class InvoiceProduct
     private string $currency = 'RON';
 
     /** cantitate */
-    private float $quantity;
+    private float $quantity = 1;
 
     /** pretul pretul produsului
      *
