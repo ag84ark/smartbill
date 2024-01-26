@@ -30,19 +30,23 @@ use Ag84ark\SmartBill\Resources\Client;
 use Ag84ark\SmartBill\Resources\InvoiceProduct;
 
 $invoice = Invoice::make();
+$invoice->setIsDraft(true);
 
-$invoice->setClient( Client::make()
+$invoice->setClient(
+  Client::make()
     ->setName("ACME CO")
     ->setVatCode("RO12345678")
     ->setRegCom("")
     ->setAddress("Main street, no 10")
     ->setIsTaxPayer(false)
     ->setCity("Bucharest")
+    ->setCounty("Bucharest")
     ->setCountry("Romania")
     ->setEmail("acme@example.com")
 );
 
-$invoice->addProduct(InvoiceProduct::make()
+$invoice->addProduct(
+  InvoiceProduct::make()
     ->setName("Produs 1")
     ->setCode("ccd1")
     ->setMeasuringUnitName("buc")
@@ -52,19 +56,9 @@ $invoice->addProduct(InvoiceProduct::make()
     ->setIsTaxIncluded(true)
     ->setTaxName("Redusa")
     ->setTaxPercentage(9)
-    ->setIsService(false)
-    ->setSaveToDb(false)
 );
 
-$invoice->addProduct(InvoiceProduct::makeDiscountItem()
-    ->setName("Discount")
-    ->setMeasuringUnitName("buc")
-    ->setCurrency("RON")
-    ->setQuantity(1)
-    ->setPrice(10)
-    ->setIsService(false)
-    ->setSaveToDb(false)
-);
+$invoice->addProduct(InvoiceProduct::makeValoricDiscountItem("Discount", 5));
 
 echo 'Emitere factura simpla: ';
 try {
