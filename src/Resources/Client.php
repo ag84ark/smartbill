@@ -52,6 +52,11 @@ class Client
     /** salvare client in baza de date */
     private bool $saveToDb = false;
 
+    public static function make(): Client
+    {
+        return new self();
+    }
+
     /** Returns array without null values */
     public function toArray(): array
     {

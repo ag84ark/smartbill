@@ -21,22 +21,80 @@ php artisan vendor:publish --provider="Ag84ark\SmartBill\SmartBillServiceProvide
 
 ## Usage
 
-<details><summary>Click for usage</summary>
-<p>
+### Using resources
+
+```php
+use Ag84ark\SmartBill\SmartBill;
+use Ag84ark\SmartBill\Resources\Invoice;
+use Ag84ark\SmartBill\Resources\Client;
+use Ag84ark\SmartBill\Resources\InvoiceProduct;
+
+$invoice = Invoice::make();
+
+$invoice->setClient( Client::make()
+    ->setName("ACME CO")
+    ->setVatCode("RO12345678")
+    ->setRegCom("")
+    ->setAddress("Main street, no 10")
+    ->setIsTaxPayer(false)
+    ->setCity("Bucharest")
+    ->setCountry("Romania")
+    ->setEmail("acme@example.com")
+);
+
+$invoice->addProduct(InvoiceProduct::make()
+    ->setName("Produs 1")
+    ->setCode("ccd1")
+    ->setMeasuringUnitName("buc")
+    ->setCurrency("RON")
+    ->setQuantity(2)
+    ->setPrice(10)
+    ->setIsTaxIncluded(true)
+    ->setTaxName("Redusa")
+    ->setTaxPercentage(9)
+    ->setIsService(false)
+    ->setSaveToDb(false)
+);
+
+$invoice->addProduct(InvoiceProduct::makeDiscountItem()
+    ->setName("Discount")
+    ->setMeasuringUnitName("buc")
+    ->setCurrency("RON")
+    ->setQuantity(1)
+    ->setPrice(10)
+    ->setIsService(false)
+    ->setSaveToDb(false)
+);
+
+echo 'Emitere factura simpla: ';
+try {
+    $smartbill = new SmartBill();
+    $output = $smartbill->createInvoice($invoice); //see docs for response
+    $invoiceNumber = $output['number'];
+    $invoiceSeries = $output['series'];
+    echo $invoiceSeries . $invoiceNumber;
+} catch (\Exception $ex) {
+    echo $ex->getMessage();
+}
+
+```
+
+
+### Using array data
 
 ```php
 
 $invoice = [
     'companyVatCode' => config('smartbill.vatCode'),
     'client' 		=> [
-        'name' 			=> "Intelligent IT",
+        'name' 			=> "ACME CO",
         'vatCode' 		=> "RO12345678",
         'regCom' 		=> "",
-        'address' 		=> "str. Sperantei, nr. 5",
+        'address' 		=> "Main street, no 10",
         'isTaxPayer' 	=> false,
-        'city' 			=> "Sibiu",
+        'city' 			=> "Bucharest",
         'country' 		=> "Romania",
-        'email' 		=> "office@intelligent.ro",
+        'email' 		=> "acme@example.com",
     ],
     'issueDate'      => date('Y-m-d'),
     'seriesName'     => config('smartbill.invoiceSeries'),
@@ -76,8 +134,6 @@ try {
 }
 ```
 
-</p>
-</details>
 
 
 ### Testing

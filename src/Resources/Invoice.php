@@ -103,12 +103,12 @@ class Invoice
         $this->issueDate = date('Y-m-d');
     }
 
-    public static function create(): self
+    public static function make(): self
     {
         return new self();
     }
 
-    public static function createProforma(string $number): self
+    public static function makeProforma(string $number): self
     {
         $invoice = new self();
         $invoice->seriesName = config('smartbill.proformaSeries');
@@ -117,7 +117,7 @@ class Invoice
         return $invoice;
     }
 
-    public static function createDraft(): self
+    public static function makeDraft(): self
     {
         $invoice = new self();
         $invoice->isDraft = true;

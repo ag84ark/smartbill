@@ -87,14 +87,14 @@ class Payment
         $this->issueDate = date('Y-m-d');
     }
 
-    public static function create(): self
+    public static function make(): self
     {
         return new self();
     }
 
-    public static function createDraft(): self
+    public static function makeDraft(): self
     {
-        return self::create()->setIsDraft(true);
+        return self::make()->setIsDraft(true);
     }
 
     public function toArray(): array

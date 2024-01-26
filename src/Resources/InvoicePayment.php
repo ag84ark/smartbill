@@ -24,7 +24,7 @@ class InvoicePayment
 
     private ?string $paymentSeries = null;
 
-    public static function create(): InvoicePayment
+    public static function make(): InvoicePayment
     {
         return new self();
     }

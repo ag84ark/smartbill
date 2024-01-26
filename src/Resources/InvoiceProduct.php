@@ -119,7 +119,7 @@ class InvoiceProduct
         }
     }
 
-    public static function create(): self
+    public static function make(): self
     {
         return new self();
     }
@@ -186,7 +186,7 @@ class InvoiceProduct
      * @param string $currency Moneda (optional, default is 'RON').
      * @return self Returneaza un obiect de tip InvoiceProduct.
      */
-    public static function createDiscountItem(
+    public static function makeDiscountItem(
         string $name,
         int $numberOfItems,
         int $discountType = 2,
