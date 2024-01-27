@@ -55,7 +55,7 @@ class ProformaInvoice
     public function __construct()
     {
         $this->companyVatCode = config('smartbill.vatCode');
-        $this->seriesName = config('smartbill.invoiceSeries');
+        $this->seriesName = config('smartbill.proformaSeries');
         $this->dueDate = date('Y-m-d', time() + config('smartbill.defaultDueDays') * 86400);
         $this->products = collect();
         $this->issueDate = date('Y-m-d');

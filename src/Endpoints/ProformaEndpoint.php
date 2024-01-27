@@ -2,6 +2,7 @@
 
 namespace Ag84ark\SmartBill\Endpoints;
 
+use Ag84ark\SmartBill\ApiResponse\CreateProformaInvoiceResponse;
 use Ag84ark\SmartBill\Resources\ProformaInvoice;
 use Ag84ark\SmartBill\SmartBillCloudRestClient;
 
@@ -25,7 +26,7 @@ class ProformaEndpoint extends BaseEndpoint
         return $this->rest_read($url, 'Accept: application/octet-stream');
     }
 
-    public function createProforma(ProformaInvoice $invoice)
+    public function createProforma(ProformaInvoice $invoice): CreateProformaInvoiceResponse
     {
         return $this->createProformaFromArray($invoice->toArray());
     }
@@ -58,9 +59,9 @@ class ProformaEndpoint extends BaseEndpoint
         return $this->rest_read($url);
     }
 
-    public function createProformaFromArray(array $data)
+    public function createProformaFromArray(array $data): CreateProformaInvoiceResponse
     {
-        return $this->rest_create(self::PROFORMA_URL, $data);
+        return CreateProformaInvoiceResponse::fromArray($this->rest_create(self::PROFORMA_URL, $data));
     }
 
     public function setSeriesName(string $seriesName): void
