@@ -60,12 +60,19 @@ $invoice->addProduct(
 
 $invoice->addProduct(InvoiceProduct::makeValoricDiscountItem("Discount", 5));
 
+$invoice->setPayment(
+  InvoicePayment::make()
+    ->setIsCash(true)
+    ->setType(Ag84ark\SmartBill\Enums\PaymentType::OrdinPlata)
+    ->setValue(15)
+);
+
 echo 'Emitere factura simpla: ';
 try {
     $smartbill = new SmartBill();
-    $output = $smartbill->invoiceEndpoint->createInvoice($invoice); //see docs for response
-    $invoiceNumber = $output['number'];
-    $invoiceSeries = $output['series'];
+    $output = $smartbill->invoiceEndpoint->createInvoice($invoice);
+    $invoiceNumber = $output->getNumber();
+    $invoiceSeries = $output->getSeries();
     echo $invoiceSeries . $invoiceNumber;
 } catch (\Exception $ex) {
     echo $ex->getMessage();
@@ -119,9 +126,9 @@ $invoice = [
 echo 'Emitere factura simpla: ';
 try {
     $smartbill = new SmartBill();
-    $output = $smartbill->invoiceEndpoint->createInvoiceFromArray($invoice); //see docs for response
-    $invoiceNumber = $output['number'];
-    $invoiceSeries = $output['series'];
+    $output = $smartbill->invoiceEndpoint->createInvoiceFromArray($invoice);
+    $invoiceNumber = $output->getNumber();
+    $invoiceSeries = $output->getSeries();
     echo $invoiceSeries . $invoiceNumber;
 } catch (\Exception $ex) {
     echo $ex->getMessage();
