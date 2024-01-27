@@ -2,6 +2,7 @@
 
 namespace Ag84ark\SmartBill\Endpoints;
 
+use Ag84ark\SmartBill\ApiResponse\BaseApiResponse;
 use Ag84ark\SmartBill\SmartBillCloudRestClient;
 
 class SeriesEndpoint extends BaseEndpoint
@@ -14,11 +15,12 @@ class SeriesEndpoint extends BaseEndpoint
         parent::__construct($restClient);
     }
 
-    public function getSeries(string $documentType = '')
+    public function getSeries(string $documentType = ''): BaseApiResponse
     {
         $documentType = ! empty($documentType) ? substr($documentType, 0, 1) : $documentType; // take the 1st character
         $url = sprintf(self::SERIES_URL, $this->companyVatCode, $documentType);
+        $response = $this->rest_read($url);
 
-        return $this->rest_read($url);
+        return BaseApiResponse::fromArray($response);
     }
 }

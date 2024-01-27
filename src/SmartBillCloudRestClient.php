@@ -80,7 +80,7 @@ class SmartBillCloudRestClient
         if ($status != 200) {
             $errorMessage = json_decode($return, true);
 
-            if (false !== strpos($url, self::EMAIL_URL)) {
+            if (false !== strpos(self::EMAIL_URL, $url)) {
                 $errorMessage = ! empty($errorMessage['status']['code']) ? $errorMessage['status']['message'] : $return;
             } else {
                 $errorMessage = ! empty($errorMessage['errorText']) ? $errorMessage['errorText'] : $return;

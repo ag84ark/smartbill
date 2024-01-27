@@ -5,6 +5,7 @@ namespace Ag84ark\SmartBill\Tests\Endpoints;
 use Ag84ark\SmartBill\Endpoints\BaseEndpoint;
 use Ag84ark\SmartBill\Endpoints\TaxesEndpoint;
 use Ag84ark\SmartBill\SmartBillCloudRestClient;
+use Ag84ark\SmartBill\Tests\Stubs\FakeApiResponse;
 use Ag84ark\SmartBill\Tests\TestCase;
 
 class TaxesEndpointTest extends TestCase
@@ -23,12 +24,13 @@ class TaxesEndpointTest extends TestCase
     public function it_retrieves_taxes_successfully()
     {
         $url = sprintf(BaseEndpoint::TAXES_URL, $this->getVatCode());
+        $response = FakeApiResponse::generateFakeResponse(['taxes' => ['name' => 'Redusa', 'percentage' => 9]]);
         $this->restClient->expects($this->once())
             ->method('performHttpCall')
             ->with(SmartBillCloudRestClient::HTTP_GET, $url)
-            ->willReturn(['tax1', 'tax2']);
+            ->willReturn($response->getServerResponseData());
 
-        $this->assertEquals(['tax1', 'tax2'], $this->taxesEndpoint->getTaxes());
+        $this->assertEquals(['name' => 'Redusa', 'percentage' => 9], $this->taxesEndpoint->getTaxes()->getResponseData()['taxes']);
     }
 
     /** @test */
@@ -36,8 +38,8 @@ class TaxesEndpointTest extends TestCase
     {
         $this->restClient->expects($this->once())
             ->method('performHttpCall')
-            ->willReturn([]);
+            ->willReturn(FakeApiResponse::generateFakeResponse()->getServerResponseData());
 
-        $this->assertEquals([], $this->taxesEndpoint->getTaxes());
+        $this->taxesEndpoint->getTaxes();
     }
 }

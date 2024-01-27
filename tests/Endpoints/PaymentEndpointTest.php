@@ -8,6 +8,7 @@ use Ag84ark\SmartBill\Enums\PaymentTypeEnum;
 use Ag84ark\SmartBill\Resources\OtherPaymentDelete;
 use Ag84ark\SmartBill\Resources\Payment;
 use Ag84ark\SmartBill\SmartBillCloudRestClient;
+use Ag84ark\SmartBill\Tests\Stubs\FakeApiResponse;
 use Ag84ark\SmartBill\Tests\TestCase;
 
 class PaymentEndpointTest extends TestCase
@@ -39,14 +40,14 @@ class PaymentEndpointTest extends TestCase
             'value' => 100,
         ];
 
-        $responseData = ['number' => '0001', 'series' => 'TEST-INV'];
+        $responseData = FakeApiResponse::generateFakeResponse();
 
         $this->restClient->expects($this->once())
             ->method('performHttpCall')
             ->with($this->equalTo(SmartBillCloudRestClient::HTTP_POST), $this->equalTo(BaseEndpoint::PAYMENT_URL), $this->equalTo($paymentArray))
-            ->willReturn($responseData);  // Set expected return value from rest_create
+            ->willReturn($responseData->getServerResponseData());
 
-        $this->assertSame($responseData, $this->paymentEndpoint->createPaymentFromArray($paymentArray));
+        $this->assertSame($responseData->toArray(), $this->paymentEndpoint->createPaymentFromArray($paymentArray)->toArray());
     }
 
     /**
@@ -60,7 +61,7 @@ class PaymentEndpointTest extends TestCase
             ->willReturn(['key' => 'value']);
 
 
-        $responseData = ['number' => '0001', 'series' => 'TEST-INV'];
+        $responseData = FakeApiResponse::generateFakeResponse(['number' => '0001', 'series' => 'TEST-INV']);
 
         $this->restClient->expects($this->once())
             ->method('performHttpCall')
@@ -69,9 +70,9 @@ class PaymentEndpointTest extends TestCase
                 $this->equalTo(BaseEndpoint::PAYMENT_URL),
                 $this->equalTo($payment->toArray())
             )
-            ->willReturn($responseData);
+            ->willReturn($responseData->getServerResponseData());
 
-        $this->assertSame($responseData, $this->paymentEndpoint->createPayment($payment));
+        $this->assertSame($responseData->toArray(), $this->paymentEndpoint->createPayment($payment)->toArray());
     }
 
     public function testDeleteOtherPayment()
@@ -93,7 +94,7 @@ class PaymentEndpointTest extends TestCase
                 $this->equalTo(SmartBillCloudRestClient::HTTP_DELETE),
                 $this->equalTo(BaseEndpoint::PAYMENT_URL . $paymentData->getUrlParams()),
             )
-            ->willReturn(['message' => 'success']);
+            ->willReturn(FakeApiResponse::generateFakeResponse()->getServerResponseData());
 
         $this->paymentEndpoint->deleteOtherPayment($paymentData);
 
@@ -102,17 +103,17 @@ class PaymentEndpointTest extends TestCase
     public function testCancelPayment(): void
     {
         $mockPaymentNumber = '12345';
-        $mockCancelResponse = [];
+        $mockCancelResponse = FakeApiResponse::generateFakeResponse();
 
         $expectedUrl = sprintf(BaseEndpoint::PAYMENT_URL . BaseEndpoint::PARAMS_CANCEL, config('smartbill.vatCode'), urlencode(config('smartbill.receiptSeries')), $mockPaymentNumber);
 
         $this->restClient->expects($this->once())
             ->method('performHttpCall')
             ->with(SmartBillCloudRestClient::HTTP_PUT, $expectedUrl)
-            ->willReturn($mockCancelResponse);
+            ->willReturn($mockCancelResponse->getServerResponseData());
 
         $cancelResponse = $this->paymentEndpoint->cancelPayment($mockPaymentNumber);
 
-        $this->assertSame($mockCancelResponse, $cancelResponse);
+        $this->assertSame($mockCancelResponse->toArray(), $cancelResponse->toArray());
     }
 }

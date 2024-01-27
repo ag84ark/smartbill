@@ -2,13 +2,8 @@
 
 namespace Ag84ark\SmartBill\ApiResponse;
 
-use Illuminate\Contracts\Support\Arrayable;
-
-class CreateProformaInvoiceResponse implements Arrayable
+class CreateProformaInvoiceResponse extends BaseApiResponse
 {
-    private string $errorText = '';
-    private string $message = '';
-
     private string $number = '';
 
     private string $series = '';
@@ -17,24 +12,15 @@ class CreateProformaInvoiceResponse implements Arrayable
 
     public static function fromArray(array $data): CreateProformaInvoiceResponse
     {
-        $invoiceResponse = new CreateProformaInvoiceResponse();
-        $invoiceResponse->errorText = $data['errorText'];
-        $invoiceResponse->message = $data['message'];
-        $invoiceResponse->number = $data['number'];
-        $invoiceResponse->series = $data['series'];
-        $invoiceResponse->url = $data['url'];
+        $proformaInvoiceResponse = new CreateProformaInvoiceResponse();
+        $proformaInvoiceResponse->errorText = $data['errorText'];
+        $proformaInvoiceResponse->message = $data['message'];
+        $proformaInvoiceResponse->number = $data['number'];
+        $proformaInvoiceResponse->series = $data['series'];
+        $proformaInvoiceResponse->url = $data['url'];
+        $proformaInvoiceResponse->responseData = $data;
 
-        return $invoiceResponse;
-    }
-
-    public function getErrorText(): string
-    {
-        return $this->errorText;
-    }
-
-    public function getMessage(): string
-    {
-        return $this->message;
+        return $proformaInvoiceResponse;
     }
 
     public function getNumber(): string
@@ -54,12 +40,10 @@ class CreateProformaInvoiceResponse implements Arrayable
 
     public function toArray(): array
     {
-        return [
-            'errorText' => $this->errorText,
-            'message' => $this->message,
+        return array_merge(parent::toArray(), [
             'number' => $this->number,
             'series' => $this->series,
             'url' => $this->url,
-        ];
+        ]);
     }
 }

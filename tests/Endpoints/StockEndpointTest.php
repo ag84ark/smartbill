@@ -5,6 +5,7 @@ namespace Ag84ark\SmartBill\Tests\Endpoints;
 use Ag84ark\SmartBill\Endpoints\BaseEndpoint;
 use Ag84ark\SmartBill\Endpoints\StockEndpoint;
 use Ag84ark\SmartBill\SmartBillCloudRestClient;
+use Ag84ark\SmartBill\Tests\Stubs\FakeApiResponse;
 use Ag84ark\SmartBill\Tests\TestCase;
 
 class StockEndpointTest extends TestCase
@@ -27,22 +28,26 @@ class StockEndpointTest extends TestCase
         $this->taxesEndpoint->setProductName('p1');
         $this->taxesEndpoint->setProductCode('pc1');
         $url = sprintf(BaseEndpoint::PRODUCTS_STOCK_URL, $this->getVatCode(), '2021-01-01', 'w1', 'p1', 'pc1');
+        $response = FakeApiResponse::generateFakeResponse([
+            'list' =>
+                ['products' =>
+                    [
+                        "measuringUnit" => "buc",
+                        "productCode" => "IT001",
+                        "productName" => "Revista IT",
+                        "quantity" => "100",
+                    ],
+                ],
+            ]);
         $this->restClient->expects($this->once())
             ->method('performHttpCall')
             ->with(SmartBillCloudRestClient::HTTP_GET, $url)
-            ->willReturn(['stock1', 'stock2']);
+            ->willReturn($response->getServerResponseData());
 
-        $this->assertEquals(['stock1', 'stock2'], $this->taxesEndpoint->getProductsStock());
-    }
+        $apiResponse = $this->taxesEndpoint->getProductsStock();
+        $this->assertEquals($apiResponse->toArray(), $response->toArray());
 
-    /** @test */
-    public function it_returns_empty_when_no_stock_is_available()
-    {
-        $this->restClient->expects($this->once())
-            ->method('performHttpCall')
-            ->willReturn([]);
-
-        $this->assertEquals([], $this->taxesEndpoint->getProductsStock());
+        $this->assertIsArray($apiResponse->getResponseData()['list']['products']);
     }
 
     /** @test */
@@ -53,8 +58,8 @@ class StockEndpointTest extends TestCase
         $this->restClient->expects($this->once())
             ->method('performHttpCall')
             ->with(SmartBillCloudRestClient::HTTP_GET, $url)
-            ->willReturn(['stock1', 'stock2']);
+            ->willReturn(FakeApiResponse::generateFakeResponse()->getServerResponseData());
 
-        $this->assertEquals(['stock1', 'stock2'], $this->taxesEndpoint->getProductsStock());
+        $this->taxesEndpoint->getProductsStock();
     }
 }

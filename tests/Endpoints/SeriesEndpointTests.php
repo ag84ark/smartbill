@@ -2,9 +2,11 @@
 
 namespace Ag84ark\SmartBill\Tests\Endpoints;
 
+use Ag84ark\SmartBill\ApiResponse\BaseApiResponse;
 use Ag84ark\SmartBill\Endpoints\BaseEndpoint;
 use Ag84ark\SmartBill\Endpoints\SeriesEndpoint;
 use Ag84ark\SmartBill\SmartBillCloudRestClient;
+use Ag84ark\SmartBill\Tests\Stubs\FakeApiResponse;
 use Ag84ark\SmartBill\Tests\TestCase;
 
 class SeriesEndpointTests extends TestCase
@@ -23,14 +25,19 @@ class SeriesEndpointTests extends TestCase
     public function it_retrieves_series_successfully()
     {
         $url = sprintf(BaseEndpoint::SERIES_URL, $this->getVatCode(), '');
-        $response = ['sbcSeries' => ['list' => ['name' => 'test', 'nextNumber' => 1, 'type' => 'f']]];
+        $response = FakeApiResponse::generateFakeResponse(['list' => ['name' => 'test', 'nextNumber' => 1, 'type' => 'f']]);
 
         $this->restClient->expects($this->once())
             ->method('performHttpCall')
             ->with(SmartBillCloudRestClient::HTTP_GET, $url)
-            ->willReturn($response);
+            ->willReturn($response->getServerResponseData());
 
-        $this->assertEquals($response, $this->seriesEndpoint->getSeries());
+        $apiResponse = $this->seriesEndpoint->getSeries();
+
+        $this->assertEquals($response->toArray(), $apiResponse->toArray());
+        $this->assertSame($response->toArray(), $apiResponse->toArray());
+        $this->assertInstanceOf(BaseApiResponse::class, $apiResponse);
+        $this->assertIsArray($apiResponse->getResponseData()['list']);
 
     }
 
@@ -38,14 +45,14 @@ class SeriesEndpointTests extends TestCase
     public function it_retrieves_series_for_invoices_successfully()
     {
         $url = sprintf(BaseEndpoint::SERIES_URL, $this->getVatCode(), 'f');
-        $response = ['sbcSeries' => ['list' => ['name' => 'test', 'nextNumber' => 1, 'type' => 'f']]];
+        $response = FakeApiResponse::generateFakeResponse(['list' => ['name' => 'test', 'nextNumber' => 1, 'type' => 'f']]);
 
         $this->restClient->expects($this->once())
             ->method('performHttpCall')
             ->with(SmartBillCloudRestClient::HTTP_GET, $url)
-            ->willReturn($response);
+            ->willReturn($response->getServerResponseData());
 
-        $this->assertEquals($response, $this->seriesEndpoint->getSeries("f"));
+        $this->assertEquals($response->toArray(), $this->seriesEndpoint->getSeries("f")->toArray());
 
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Ag84ark\SmartBill\Endpoints;
 
+use Ag84ark\SmartBill\ApiResponse\BaseApiResponse;
 use Ag84ark\SmartBill\ApiResponse\CreateProformaInvoiceResponse;
 use Ag84ark\SmartBill\Resources\ProformaInvoice;
 use Ag84ark\SmartBill\SmartBillCloudRestClient;
@@ -31,32 +32,36 @@ class ProformaEndpoint extends BaseEndpoint
         return $this->createProformaFromArray($invoice->toArray());
     }
 
-    public function cancelProforma($number)
+    public function cancelProforma($number): BaseApiResponse
     {
         $url = sprintf(self::PROFORMA_URL.self::PARAMS_CANCEL, $this->companyVatCode, $this->getEncodedSeriesName(), $number);
+        $response = $this->rest_update($url, '');
 
-        return $this->rest_update($url, '');
+        return BaseApiResponse::fromArray($response);
     }
 
-    public function deleteProforma($number)
+    public function deleteProforma($number): BaseApiResponse
     {
         $url = sprintf(self::PROFORMA_URL.self::PARAMS_DELETE, $this->companyVatCode, $this->getEncodedSeriesName(), $number);
+        $response = $this->rest_delete($url);
 
-        return $this->rest_delete($url);
+        return BaseApiResponse::fromArray($response);
     }
 
-    public function restoreProforma($number)
+    public function restoreProforma($number): BaseApiResponse
     {
         $url = sprintf(self::PROFORMA_URL.self::PARAMS_RESTORE, $this->companyVatCode, $this->getEncodedSeriesName(), $number);
+        $response = $this->rest_update($url, '');
 
-        return $this->rest_update($url, '', 'PUT');
+        return BaseApiResponse::fromArray($response);
     }
 
-    public function getStatusProforma($number)
+    public function getStatusProforma($number): BaseApiResponse
     {
         $url = sprintf(self::STATUS_PROFORMA_URL.self::PARAMS_STATUS, $this->companyVatCode, $this->getEncodedSeriesName(), $number);
+        $response = $this->rest_read($url);
 
-        return $this->rest_read($url);
+        return BaseApiResponse::fromArray($response);
     }
 
     public function createProformaFromArray(array $data): CreateProformaInvoiceResponse

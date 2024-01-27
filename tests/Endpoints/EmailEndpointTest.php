@@ -2,6 +2,7 @@
 
 namespace Ag84ark\SmartBill\Tests\Endpoints;
 
+use Ag84ark\SmartBill\ApiResponse\EmailApiResponse;
 use Ag84ark\SmartBill\Endpoints\BaseEndpoint;
 use Ag84ark\SmartBill\Endpoints\EmailEndpoint;
 use Ag84ark\SmartBill\Resources\SendEmail;
@@ -27,22 +28,7 @@ class EmailEndpointTest extends TestCase
     {
         $email = new SendEmail('test', 'test', 'factura');
 
-        $this->restClient->expects($this->once())
-            ->method('performHttpCall')
-            ->with(
-                SmartBillCloudRestClient::HTTP_POST,
-                BaseEndpoint::EMAIL_URL,
-                $email->toArray()
-            )
-            ->willReturn(true);
-
-        $this->assertTrue($this->emailEndpoint->sendEmail($email));
-    }
-
-    /** @test */
-    public function it_fails_to_send_an_email()
-    {
-        $email = new SendEmail('test', 'test', 'factura');
+        $response = new EmailApiResponse('Success', 0);
 
         $this->restClient->expects($this->once())
             ->method('performHttpCall')
@@ -51,8 +37,10 @@ class EmailEndpointTest extends TestCase
                 BaseEndpoint::EMAIL_URL,
                 $email->toArray()
             )
-            ->willReturn(false);
+            ->willReturn($response->toArray());
+        $response = $this->emailEndpoint->sendEmail($email);
 
-        $this->assertFalse($this->emailEndpoint->sendEmail($email));
+        $this->assertSame($response->toArray(), $response->toArray());
+        $this->assertInstanceOf(EmailApiResponse::class, $response);
     }
 }

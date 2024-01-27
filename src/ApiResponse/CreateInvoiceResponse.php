@@ -2,13 +2,8 @@
 
 namespace Ag84ark\SmartBill\ApiResponse;
 
-use Illuminate\Contracts\Support\Arrayable;
-
-class CreateInvoiceResponse implements Arrayable
+class CreateInvoiceResponse extends BaseApiResponse
 {
-    private string $errorText = '';
-    private string $message = '';
-
     private string $number = '';
 
     private string $series = '';
@@ -23,18 +18,9 @@ class CreateInvoiceResponse implements Arrayable
         $invoiceResponse->number = $data['number'];
         $invoiceResponse->series = $data['series'];
         $invoiceResponse->url = $data['url'];
+        $invoiceResponse->responseData = $data;
 
         return $invoiceResponse;
-    }
-
-    public function getErrorText(): string
-    {
-        return $this->errorText;
-    }
-
-    public function getMessage(): string
-    {
-        return $this->message;
     }
 
     public function getNumber(): string
@@ -54,12 +40,10 @@ class CreateInvoiceResponse implements Arrayable
 
     public function toArray(): array
     {
-        return [
-            'errorText' => $this->errorText,
-            'message' => $this->message,
+        return array_merge(parent::toArray(), [
             'number' => $this->number,
             'series' => $this->series,
             'url' => $this->url,
-        ];
+        ]);
     }
 }

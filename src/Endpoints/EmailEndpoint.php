@@ -2,6 +2,7 @@
 
 namespace Ag84ark\SmartBill\Endpoints;
 
+use Ag84ark\SmartBill\ApiResponse\EmailApiResponse;
 use Ag84ark\SmartBill\Resources\SendEmail;
 use Ag84ark\SmartBill\SmartBillCloudRestClient;
 
@@ -12,8 +13,8 @@ class EmailEndpoint extends BaseEndpoint
         parent::__construct($restClient);
     }
 
-    public function sendEmail(SendEmail $email)
+    public function sendEmail(SendEmail $email): EmailApiResponse
     {
-        return $this->rest_create(self::EMAIL_URL, $email->toArray());
+        return EmailApiResponse::fromArray($this->rest_create(self::EMAIL_URL, $email->toArray()));
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Ag84ark\SmartBill\Endpoints;
 
+use Ag84ark\SmartBill\ApiResponse\BaseApiResponse;
 use Ag84ark\SmartBill\Resources\OtherPaymentDelete;
 use Ag84ark\SmartBill\Resources\Payment;
 use Ag84ark\SmartBill\SmartBillCloudRestClient;
@@ -18,51 +19,83 @@ class PaymentEndpoint extends BaseEndpoint
         parent::__construct($restClient);
     }
 
-    public function createPaymentFromArray(array $data)
+    public function createPaymentFromArray(array $data): BaseApiResponse
     {
-        return $this->rest_create(self::PAYMENT_URL, $data);
+        $response = $this->rest_create(self::PAYMENT_URL, $data);
+
+        return BaseApiResponse::fromArray($response);
     }
 
-    public function createPayment(Payment $payment)
+    public function createPayment(Payment $payment): BaseApiResponse
     {
-        return $this->createPaymentFromArray($payment->toArray());
+        $response = $this->rest_create(self::PAYMENT_URL, $payment->toArray());
+
+        return BaseApiResponse::fromArray($response);
     }
 
-    public function deleteOtherPayment(OtherPaymentDelete $paymentData)
+    public function deleteOtherPayment(OtherPaymentDelete $paymentData): BaseApiResponse
     {
-        return $this->rest_delete(self::PAYMENT_URL . $paymentData->getUrlParams(), 'DELETE');
+        $response = $this->rest_delete(self::PAYMENT_URL . $paymentData->getUrlParams(), 'DELETE');
+
+        return BaseApiResponse::fromArray($response);
     }
 
-    public function cancelPayment($number)
+    public function cancelPayment($number): BaseApiResponse
     {
         $url = sprintf(self::PAYMENT_URL.self::PARAMS_CANCEL, $this->companyVatCode, $this->getEncodedSeriesName(), $number);
+        $response = $this->rest_update($url, '');
 
-        return $this->rest_update($url, '');
+        return BaseApiResponse::fromArray($response);
     }
 
-    public function deleteReceipt($number)
+    public function deleteReceipt($number): BaseApiResponse
     {
         $url = sprintf(self::PAYMENT_URL.self::PARAMS_DELETE_RECEIPT, $this->companyVatCode, $this->getEncodedSeriesName(), $number);
+        $response = $this->rest_delete($url);
 
-        return $this->rest_delete($url);
+        return BaseApiResponse::fromArray($response);
     }
 
-    public function detailsFiscalReceipt($id)
+    public function detailsFiscalReceipt($id): BaseApiResponse
     {
         $url = sprintf(self::PAYMENT_URL.self::PARAMS_FISCAL_RECEIPT, $this->companyVatCode, $id);
-        $text = $this->rest_read($url);
+        $response = $this->rest_read($url);
 
         try {
-            $text = base64_decode($text['message']);
+            $response['message'] = base64_decode($response['message']);
+
+            return BaseApiResponse::fromArray($response);
         } catch (\Exception $ex) {
             throw new \Exception('invalid / empty response');
         }
-
-        return $text;
     }
 
     private function getEncodedSeriesName(): string
     {
         return urlencode($this->seriesName);
+    }
+
+    public function getCompanyVatCode(): string
+    {
+        return $this->companyVatCode;
+    }
+
+    public function setCompanyVatCode(string $companyVatCode): PaymentEndpoint
+    {
+        $this->companyVatCode = $companyVatCode;
+
+        return $this;
+    }
+
+    public function getSeriesName(): string
+    {
+        return $this->seriesName;
+    }
+
+    public function setSeriesName(string $seriesName): PaymentEndpoint
+    {
+        $this->seriesName = $seriesName;
+
+        return $this;
     }
 }

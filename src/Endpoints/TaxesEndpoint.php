@@ -2,6 +2,7 @@
 
 namespace Ag84ark\SmartBill\Endpoints;
 
+use Ag84ark\SmartBill\ApiResponse\BaseApiResponse;
 use Ag84ark\SmartBill\SmartBillCloudRestClient;
 
 class TaxesEndpoint extends BaseEndpoint
@@ -17,7 +18,8 @@ class TaxesEndpoint extends BaseEndpoint
     public function getTaxes()
     {
         $url = sprintf(self::TAXES_URL, $this->companyVatCode);
+        $response = $this->rest_read($url);
 
-        return $this->rest_read($url);
+        return BaseApiResponse::fromArray($response);
     }
 }

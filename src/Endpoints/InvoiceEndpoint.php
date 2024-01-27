@@ -2,6 +2,7 @@
 
 namespace Ag84ark\SmartBill\Endpoints;
 
+use Ag84ark\SmartBill\ApiResponse\BaseApiResponse;
 use Ag84ark\SmartBill\ApiResponse\CreateInvoiceResponse;
 use Ag84ark\SmartBill\Resources\Invoice;
 use Ag84ark\SmartBill\Resources\ReverseInvoices;
@@ -32,47 +33,55 @@ class InvoiceEndpoint extends BaseEndpoint
         return $this->createInvoiceFromArray($invoice->toArray());
     }
 
-    public function createReverseInvoice(ReverseInvoices $reverseInvoices)
+    public function createReverseInvoice(ReverseInvoices $reverseInvoices): BaseApiResponse
     {
         return $this->createReverseInvoiceFromArray($reverseInvoices->toArray());
     }
 
-    public function deleteInvoice($number)
+    public function deleteInvoice($number): BaseApiResponse
     {
         $url = sprintf(self::INVOICE_URL.self::PARAMS_DELETE, $this->companyVatCode, $this->getEncodedSeriesName(), $number);
+        $response = $this->rest_delete($url);
 
-        return $this->rest_delete($url);
+        return BaseApiResponse::fromArray($response);
     }
 
-    public function cancelInvoice($number)
+    public function cancelInvoice($number): BaseApiResponse
     {
         $url = sprintf(self::INVOICE_URL.self::PARAMS_CANCEL, $this->companyVatCode, $this->getEncodedSeriesName(), $number);
+        $response = $this->rest_update($url, '');
 
-        return $this->rest_update($url, '');
+        return BaseApiResponse::fromArray($response);
     }
 
-    public function restoreInvoice($number)
+    public function restoreInvoice($number): BaseApiResponse
     {
         $url = sprintf(self::INVOICE_URL.self::PARAMS_RESTORE, $this->companyVatCode, $this->getEncodedSeriesName(), $number);
+        $response = $this->rest_update($url, '');
 
-        return $this->rest_update($url, '');
+        return BaseApiResponse::fromArray($response);
     }
 
-    public function getStatusInvoicePayments($number)
+    public function getStatusInvoicePayments($number): BaseApiResponse
     {
         $url = sprintf(self::STATUS_INVOICE_URL.self::PARAMS_STATUS, $this->companyVatCode, $this->getEncodedSeriesName(), $number);
+        $response = $this->rest_read($url);
 
-        return $this->rest_read($url);
+        return BaseApiResponse::fromArray($response);
     }
 
     public function createInvoiceFromArray(array $data): CreateInvoiceResponse
     {
-        return CreateInvoiceResponse::fromArray($this->rest_create(self::INVOICE_URL, $data));
+        $response = $this->rest_create(self::INVOICE_URL, $data);
+
+        return CreateInvoiceResponse::fromArray($response);
     }
 
-    public function createReverseInvoiceFromArray(array $data)
+    public function createReverseInvoiceFromArray(array $data): BaseApiResponse
     {
-        return $this->rest_create(self::INVOICE_REVERSE_URL, $data);
+        $response = $this->rest_create(self::INVOICE_REVERSE_URL, $data);
+
+        return BaseApiResponse::fromArray($response);
     }
 
     public function setSeriesName(string $seriesName): void

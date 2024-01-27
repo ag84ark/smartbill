@@ -2,6 +2,7 @@
 
 namespace Ag84ark\SmartBill\Endpoints;
 
+use Ag84ark\SmartBill\ApiResponse\BaseApiResponse;
 use Ag84ark\SmartBill\Helpers\DateHelper;
 use Ag84ark\SmartBill\SmartBillCloudRestClient;
 
@@ -24,11 +25,12 @@ class StockEndpoint extends BaseEndpoint
         $this->date = date('Y-m-d');
     }
 
-    public function getProductsStock()
+    public function getProductsStock(): BaseApiResponse
     {
         $url = sprintf(self::PRODUCTS_STOCK_URL, $this->companyVatCode, $this->date, $this->warehouseName, $this->productName, $this->productCode);
+        $response = $this->rest_read($url);
 
-        return $this->rest_list($url);
+        return BaseApiResponse::fromArray($response);
     }
 
     public function getCompanyVatCode(): string
