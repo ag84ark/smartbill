@@ -50,12 +50,12 @@ class SmartBillCloudRestClient
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
         // debugging
-        $isDebug = self::DEBUG_ON_ERROR;
-        if ($isDebug) {
+        if (self::DEBUG_ON_ERROR) {
             $debug = [
                 'URL: ' => $url,
-                'data: ' => $data,
                 'headers: ' => $headAccept,
+                'method: ' => $request,
+                'data: ' => $data,
             ];
             echo '<pre>' , print_r($debug, true), '</pre>';
         }
@@ -86,7 +86,7 @@ class SmartBillCloudRestClient
                 $errorMessage = ! empty($errorMessage['errorText']) ? $errorMessage['errorText'] : $return;
             }
 
-            throw new SmartbillApiException($errorMessage);
+            throw new SmartbillApiException($errorMessage, $status);
         } elseif (false === strpos($url, '/pdf?')) {
             $return = json_decode($return, true);
         }

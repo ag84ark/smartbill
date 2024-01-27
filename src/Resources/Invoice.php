@@ -59,6 +59,8 @@ class Invoice
      */
     private bool $useEstimateDetails = false;
 
+    private ?array $estimate = null;
+
     /**
      * true - se foloseste tva la incasare;
      * false  - nu se foloseste tva la incasare
@@ -78,9 +80,6 @@ class Invoice
 
     /** se completeaza doar pentru afisarea linkului de plata pe pdf */
     private ?string $paymentUrl = null;
-
-    /** numarul proformei */
-    private ?string $number = null;
 
     /** Trimiterea facturii clientului la emitere utilizand $email data de mai jos */
     private bool $sendEmail = false;
@@ -108,11 +107,15 @@ class Invoice
         return new self();
     }
 
-    public static function makeProforma(string $number): self
+    public static function makeFromProforma(string $proformaSeries, string $number): self
     {
         $invoice = new self();
         $invoice->seriesName = config('smartbill.proformaSeries');
-        $invoice->number = $number;
+        $invoice->useEstimateDetails = true;
+        $invoice->estimate = [
+            'number' => $number,
+            'seriesName' => $proformaSeries,
+        ];
 
         return $invoice;
     }
@@ -161,12 +164,14 @@ class Invoice
             'colectedTax' => $this->colectedTax,
             'paymentTotal' => $this->paymentTotal,
             'paymentUrl' => $this->paymentUrl,
-            'number' => $this->number,
             'sendEmail' => $this->sendEmail,
             'email' => $this->email ? $this->email->toArray() : null,
-            'products' => $this->products->map(function (InvoiceProduct $product) {
-                return $product->toArray();
-            })->toArray(),
+            'estimate' => $this->estimate,
+            'products' => $this->products->count()
+                ? $this->products->map(function (InvoiceProduct $product) {
+                    return $product->toArray();
+                })->toArray()
+                : null,
         ])->filter(function ($value) {
             return ! is_null($value);
         })->toArray();
@@ -524,18 +529,6 @@ class Invoice
         return $this;
     }
 
-    public function getNumber(): ?string
-    {
-        return $this->number;
-    }
-
-    public function setNumber(?string $number): Invoice
-    {
-        $this->number = $number;
-
-        return $this;
-    }
-
     public function isSendEmail(): bool
     {
         return $this->sendEmail;
@@ -568,6 +561,21 @@ class Invoice
     public function setProducts(Collection $products): Invoice
     {
         $this->products = $products;
+
+        return $this;
+    }
+
+    public function getEstimate(): ?array
+    {
+        return $this->estimate;
+    }
+
+    public function setEstimate(array $estimate): Invoice
+    {
+        $this->estimate = [
+            'number' => $estimate['number'],
+            'seriesName' => $estimate['seriesName'],
+        ];
 
         return $this;
     }

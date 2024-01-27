@@ -2,6 +2,7 @@
 
 namespace Ag84ark\SmartBill\Endpoints;
 
+use Ag84ark\SmartBill\ApiResponse\CreateInvoiceResponse;
 use Ag84ark\SmartBill\Resources\Invoice;
 use Ag84ark\SmartBill\Resources\ReverseInvoices;
 use Ag84ark\SmartBill\SmartBillCloudRestClient;
@@ -26,7 +27,7 @@ class InvoiceEndpoint extends BaseEndpoint
         return $this->rest_read($url,  'Accept: application/octet-stream');
     }
 
-    public function createInvoice(Invoice $invoice)
+    public function createInvoice(Invoice $invoice): CreateInvoiceResponse
     {
         return $this->createInvoiceFromArray($invoice->toArray());
     }
@@ -64,9 +65,9 @@ class InvoiceEndpoint extends BaseEndpoint
         return $this->rest_read($url);
     }
 
-    public function createInvoiceFromArray(array $data)
+    public function createInvoiceFromArray(array $data): CreateInvoiceResponse
     {
-        return $this->rest_create(self::INVOICE_URL, $data);
+        return CreateInvoiceResponse::fromArray($this->rest_create(self::INVOICE_URL, $data));
     }
 
     public function createReverseInvoiceFromArray(array $data)
