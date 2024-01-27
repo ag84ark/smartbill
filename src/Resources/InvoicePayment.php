@@ -2,21 +2,11 @@
 
 namespace Ag84ark\SmartBill\Resources;
 
+use Ag84ark\SmartBill\Enums\PaymentTypeEnum;
 use Ag84ark\SmartBill\Exceptions\InvalidPaymentTypeException;
 
 class InvoicePayment
 {
-    private array $paymentTypes = [
-        'Chitanta',
-        'Bon',
-        'Ordin de plata',
-        'Card',
-        'CEC',
-        'Bilet ordin',
-        'Mandat postal',
-        'Alta',
-    ];
-
     private string $type;
     private float  $value;
 
@@ -29,6 +19,36 @@ class InvoicePayment
         return new self();
     }
 
+    public static function makeCardPayment($value): InvoicePayment
+    {
+        return self::make()->setType(PaymentTypeEnum::Card)->setValue($value);
+    }
+
+    public static function makeCashPayment($value, $type = PaymentTypeEnum::Chitanta): InvoicePayment
+    {
+        return self::make()->setType($type)->setValue($value)->setIsCash(true);
+    }
+
+    public static function makeBankPayment($value): InvoicePayment
+    {
+        return self::make()->setType(PaymentTypeEnum::OrdinPlata)->setValue($value);
+    }
+
+    public static function makeOtherPayment($value): InvoicePayment
+    {
+        return self::make()->setType(PaymentTypeEnum::Other)->setValue($value);
+    }
+
+    public static function makeCECPayment($value): InvoicePayment
+    {
+        return self::make()->setType(PaymentTypeEnum::CEC)->setValue($value);
+    }
+
+    public static function makePostalOrderPayment($value): InvoicePayment
+    {
+        return self::make()->setType(PaymentTypeEnum::MandatPostal)->setValue($value);
+    }
+
     public function getType(): string
     {
         return $this->type;
@@ -39,7 +59,7 @@ class InvoicePayment
      */
     public function setType(string $type): InvoicePayment
     {
-        if (! in_array($type, $this->paymentTypes)) {
+        if (! PaymentTypeEnum::isValid($type)) {
             throw new InvalidPaymentTypeException($type);
         }
         $this->type = $type;

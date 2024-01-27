@@ -63,7 +63,7 @@ $invoice->addProduct(InvoiceProduct::makeValoricDiscountItem("Discount", 5));
 echo 'Emitere factura simpla: ';
 try {
     $smartbill = new SmartBill();
-    $output = $smartbill->createInvoice($invoice); //see docs for response
+    $output = $smartbill->invoiceEndpoint->createInvoice($invoice); //see docs for response
     $invoiceNumber = $output['number'];
     $invoiceSeries = $output['series'];
     echo $invoiceSeries . $invoiceNumber;
@@ -119,7 +119,7 @@ $invoice = [
 echo 'Emitere factura simpla: ';
 try {
     $smartbill = new SmartBill();
-    $output = $smartbill->createInvoiceFromArray($invoice); //see docs for response
+    $output = $smartbill->invoiceEndpoint->createInvoiceFromArray($invoice); //see docs for response
     $invoiceNumber = $output['number'];
     $invoiceSeries = $output['series'];
     echo $invoiceSeries . $invoiceNumber;

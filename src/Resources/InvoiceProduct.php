@@ -2,6 +2,7 @@
 
 namespace Ag84ark\SmartBill\Resources;
 
+use Ag84ark\SmartBill\Enums\DiscountTypeEnum;
 use Ag84ark\SmartBill\Exceptions\InvalidTaxNameException;
 
 class InvoiceProduct
@@ -190,10 +191,10 @@ class InvoiceProduct
      * @param string $currency Moneda (optional, default is 'RON').
      * @return self Returneaza un obiect de tip InvoiceProduct.
      */
-    public static function makeDiscountItem(
+    private static function makeDiscountItem(
         string $name,
         int $numberOfItems,
-        int $discountType = 2,
+        int $discountType,
         ?float $discountValue = null,
         ?float $discountPercentage = null,
         string $measuringUnitName = 'buc',
@@ -223,7 +224,7 @@ class InvoiceProduct
         return self::makeDiscountItem(
             $name,
             $numberOfItems,
-            1,
+            DiscountTypeEnum::Valoric,
             $discountValue,
             null,
             $measuringUnitName,
@@ -241,7 +242,7 @@ class InvoiceProduct
         return self::makeDiscountItem(
             $name,
             $numberOfItems,
-            2,
+            DiscountTypeEnum::Procentual,
             null,
             $discountPercentage,
             $measuringUnitName,

@@ -2,8 +2,8 @@
 
 namespace Ag84ark\SmartBill\Tests\Helpers;
 
-use Ag84ark\SmartBill\Helpers\DateHelper;
 use Ag84ark\SmartBill\Exceptions\InvalidDateException;
+use Ag84ark\SmartBill\Helpers\DateHelper;
 use PHPUnit\Framework\TestCase;
 
 class DateHelperTest extends TestCase
