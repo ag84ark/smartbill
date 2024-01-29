@@ -3,8 +3,9 @@
 namespace Ag84ark\SmartBill\ApiResponse;
 
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Jsonable;
 
-class BaseApiResponse implements Arrayable
+class BaseApiResponse implements Arrayable, Jsonable
 {
     protected string $errorText = '';
     protected string $message = '';
@@ -47,5 +48,10 @@ class BaseApiResponse implements Arrayable
     public function getResponseData(): array
     {
         return $this->responseData;
+    }
+
+    public function toJson($options = 0)
+    {
+        return json_encode($this->toArray(), $options);
     }
 }

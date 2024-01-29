@@ -3,6 +3,7 @@
 namespace Ag84ark\SmartBill\ApiResponse;
 
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Jsonable;
 
 /**
  *
@@ -10,7 +11,7 @@ use Illuminate\Contracts\Support\Arrayable;
  * For now, it's only used when the operation is successful.
  *
  */
-class EmailApiResponse implements Arrayable
+class EmailApiResponse implements Arrayable, Jsonable
 {
     private string $message;
     private int $code;
@@ -66,5 +67,10 @@ class EmailApiResponse implements Arrayable
             'message' => $this->message,
             'code' => $this->code,
         ];
+    }
+
+    public function toJson($options = 0)
+    {
+        return json_encode($this->toArray(), $options);
     }
 }

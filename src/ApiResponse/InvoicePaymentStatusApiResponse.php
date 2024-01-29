@@ -10,6 +10,8 @@ class InvoicePaymentStatusApiResponse extends BaseApiResponse
     private float $paidAmount = 0;
     private float $unpaidAmount = 0;
 
+    private bool $paid = false;
+
     public static function fromArray(array $data): InvoicePaymentStatusApiResponse
     {
         $invoicePaymentStatusResponse = new InvoicePaymentStatusApiResponse();
@@ -20,6 +22,7 @@ class InvoicePaymentStatusApiResponse extends BaseApiResponse
         $invoicePaymentStatusResponse->invoiceTotalAmount = $data['invoiceTotalAmount'];
         $invoicePaymentStatusResponse->paidAmount = $data['paidAmount'];
         $invoicePaymentStatusResponse->unpaidAmount = $data['unpaidAmount'];
+        $invoicePaymentStatusResponse->paid = $data['paid'];
 
         $invoicePaymentStatusResponse->responseData = $data;
 
@@ -34,6 +37,47 @@ class InvoicePaymentStatusApiResponse extends BaseApiResponse
             'invoiceTotalAmount' => $this->invoiceTotalAmount,
             'paidAmount' => $this->paidAmount,
             'unpaidAmount' => $this->unpaidAmount,
+            'paid' => $this->paid,
         ]);
+    }
+
+    public function getNumber(): string
+    {
+        return $this->number;
+    }
+
+    public function getSeries(): string
+    {
+        return $this->series;
+    }
+
+    public function getInvoiceTotalAmount(): float
+    {
+        return $this->invoiceTotalAmount;
+    }
+
+    public function getPaidAmount(): float
+    {
+        return $this->paidAmount;
+    }
+
+    public function getUnpaidAmount(): float
+    {
+        return $this->unpaidAmount;
+    }
+
+    public function isPaid(): bool
+    {
+        return $this->paid;
+    }
+
+    public function isPartiallyPaid(): bool
+    {
+        return $this->paidAmount > 0 && $this->paidAmount < $this->invoiceTotalAmount;
+    }
+
+    public function isUnpaid(): bool
+    {
+        return $this->paidAmount == 0;
     }
 }
