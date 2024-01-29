@@ -3,7 +3,7 @@
 namespace Ag84ark\SmartBill\Endpoints;
 
 use Ag84ark\SmartBill\ApiResponse\BaseApiResponse;
-use Ag84ark\SmartBill\ApiResponse\CreateProformaInvoiceResponse;
+use Ag84ark\SmartBill\ApiResponse\CreateProformaInvoiceApiResponse;
 use Ag84ark\SmartBill\Resources\ProformaInvoice;
 use Ag84ark\SmartBill\SmartBillCloudRestClient;
 
@@ -27,7 +27,7 @@ class ProformaEndpoint extends BaseEndpoint
         return $this->rest_read($url, 'Accept: application/octet-stream');
     }
 
-    public function createProforma(ProformaInvoice $invoice): CreateProformaInvoiceResponse
+    public function createProforma(ProformaInvoice $invoice): CreateProformaInvoiceApiResponse
     {
         return $this->createProformaFromArray($invoice->toArray());
     }
@@ -64,19 +64,23 @@ class ProformaEndpoint extends BaseEndpoint
         return BaseApiResponse::fromArray($response);
     }
 
-    public function createProformaFromArray(array $data): CreateProformaInvoiceResponse
+    public function createProformaFromArray(array $data): CreateProformaInvoiceApiResponse
     {
-        return CreateProformaInvoiceResponse::fromArray($this->rest_create(self::PROFORMA_URL, $data));
+        return CreateProformaInvoiceApiResponse::fromArray($this->rest_create(self::PROFORMA_URL, $data));
     }
 
-    public function setSeriesName(string $seriesName): void
-    {
-        $this->seriesName = $seriesName;
-    }
-
-    public function setCompanyVatCode(string $companyVatCode): void
+    public function setCompanyVatCode(string $companyVatCode): ProformaEndpoint
     {
         $this->companyVatCode = $companyVatCode;
+
+        return $this;
+    }
+
+    public function setSeriesName(string $seriesName): ProformaEndpoint
+    {
+        $this->seriesName = $seriesName;
+
+        return $this;
     }
 
     private function getEncodedSeriesName(): string

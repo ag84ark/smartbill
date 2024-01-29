@@ -2,7 +2,7 @@
 
 namespace Ag84ark\SmartBill\ApiResponse;
 
-class CreateProformaInvoiceResponse extends BaseApiResponse
+class CreateInvoiceApiResponse extends BaseApiResponse
 {
     private string $number = '';
 
@@ -10,17 +10,17 @@ class CreateProformaInvoiceResponse extends BaseApiResponse
 
     private string $url = '';
 
-    public static function fromArray(array $data): CreateProformaInvoiceResponse
+    public static function fromArray(array $data): CreateInvoiceApiResponse
     {
-        $proformaInvoiceResponse = new CreateProformaInvoiceResponse();
-        $proformaInvoiceResponse->errorText = $data['errorText'];
-        $proformaInvoiceResponse->message = $data['message'];
-        $proformaInvoiceResponse->number = $data['number'];
-        $proformaInvoiceResponse->series = $data['series'];
-        $proformaInvoiceResponse->url = $data['url'];
-        $proformaInvoiceResponse->responseData = $data;
+        $invoiceResponse = new CreateInvoiceApiResponse();
+        $invoiceResponse->errorText = $data['errorText'];
+        $invoiceResponse->message = $data['message'];
+        $invoiceResponse->number = $data['number'];
+        $invoiceResponse->series = $data['series'];
+        $invoiceResponse->url = $data['url'];
+        $invoiceResponse->responseData = $data;
 
-        return $proformaInvoiceResponse;
+        return $invoiceResponse;
     }
 
     public function getNumber(): string

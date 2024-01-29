@@ -47,6 +47,12 @@ class ProformaInvoice
     /** se completeaza doar pentru afisarea linkului de plata pe pdf */
     private ?string $paymentUrl = null;
 
+    /** Trimiterea facturii clientului la emitere utilizand $email data de mai jos */
+    private bool $sendEmail = false;
+
+    /** adresele de email la care se trimite factura */
+    private ?InvoiceSendEmailDetails $email = null;
+
     /**
      * @var InvoiceProduct[]|Collection
      */
@@ -101,6 +107,8 @@ class ProformaInvoice
             'delegateIdentityCard' => $this->delegateIdentityCard,
             'delegateAuto' => $this->delegateAuto,
             'paymentUrl' => $this->paymentUrl,
+            'sendEmail' => $this->sendEmail,
+            'email' => $this->email ? $this->email->toArray() : null,
             'products' => $this->products->map(function (InvoiceProduct $product) {
                 return $product->toArray();
             })->toArray(),
@@ -355,6 +363,30 @@ class ProformaInvoice
     public function setProducts(Collection $products): ProformaInvoice
     {
         $this->products = $products;
+
+        return $this;
+    }
+
+    public function isSendEmail(): bool
+    {
+        return $this->sendEmail;
+    }
+
+    public function setSendEmail(bool $sendEmail): ProformaInvoice
+    {
+        $this->sendEmail = $sendEmail;
+
+        return $this;
+    }
+
+    public function getEmail(): ?InvoiceSendEmailDetails
+    {
+        return $this->email;
+    }
+
+    public function setEmail(?InvoiceSendEmailDetails $email): ProformaInvoice
+    {
+        $this->email = $email;
 
         return $this;
     }

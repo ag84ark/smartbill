@@ -19,8 +19,13 @@ You can publish the config file with:
 php artisan vendor:publish --provider="Ag84ark\SmartBill\SmartBillServiceProvider" --tag="laravel-smartbill-config"
 ```
 
+## Documentation
+
+In the making
+
 ## Usage
 
+### Invoice
 ### Using resources
 
 ```php
@@ -140,7 +145,7 @@ try {
 ### Testing
 
 ``` bash
-In the making
+Partially tested
 ```
 
 ### Changelog

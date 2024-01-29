@@ -3,7 +3,8 @@
 namespace Ag84ark\SmartBill\Endpoints;
 
 use Ag84ark\SmartBill\ApiResponse\BaseApiResponse;
-use Ag84ark\SmartBill\ApiResponse\CreateInvoiceResponse;
+use Ag84ark\SmartBill\ApiResponse\CreateInvoiceApiResponse;
+use Ag84ark\SmartBill\ApiResponse\InvoicePaymentStatusApiResponse;
 use Ag84ark\SmartBill\Resources\Invoice;
 use Ag84ark\SmartBill\Resources\ReverseInvoices;
 use Ag84ark\SmartBill\SmartBillCloudRestClient;
@@ -28,7 +29,7 @@ class InvoiceEndpoint extends BaseEndpoint
         return $this->rest_read($url,  'Accept: application/octet-stream');
     }
 
-    public function createInvoice(Invoice $invoice): CreateInvoiceResponse
+    public function createInvoice(Invoice $invoice): CreateInvoiceApiResponse
     {
         return $this->createInvoiceFromArray($invoice->toArray());
     }
@@ -62,19 +63,19 @@ class InvoiceEndpoint extends BaseEndpoint
         return BaseApiResponse::fromArray($response);
     }
 
-    public function getStatusInvoicePayments($number): BaseApiResponse
+    public function getInvoicePaymentStatus($number): InvoicePaymentStatusApiResponse
     {
         $url = sprintf(self::STATUS_INVOICE_URL.self::PARAMS_STATUS, $this->companyVatCode, $this->getEncodedSeriesName(), $number);
         $response = $this->rest_read($url);
 
-        return BaseApiResponse::fromArray($response);
+        return InvoicePaymentStatusApiResponse::fromArray($response);
     }
 
-    public function createInvoiceFromArray(array $data): CreateInvoiceResponse
+    public function createInvoiceFromArray(array $data): CreateInvoiceApiResponse
     {
         $response = $this->rest_create(self::INVOICE_URL, $data);
 
-        return CreateInvoiceResponse::fromArray($response);
+        return CreateInvoiceApiResponse::fromArray($response);
     }
 
     public function createReverseInvoiceFromArray(array $data): BaseApiResponse
@@ -84,14 +85,18 @@ class InvoiceEndpoint extends BaseEndpoint
         return BaseApiResponse::fromArray($response);
     }
 
-    public function setSeriesName(string $seriesName): void
-    {
-        $this->seriesName = $seriesName;
-    }
-
-    public function setCompanyVatCode(string $companyVatCode): void
+    public function setCompanyVatCode(string $companyVatCode): InvoiceEndpoint
     {
         $this->companyVatCode = $companyVatCode;
+
+        return $this;
+    }
+
+    public function setSeriesName(string $seriesName): InvoiceEndpoint
+    {
+        $this->seriesName = $seriesName;
+
+        return $this;
     }
 
     private function getEncodedSeriesName(): string

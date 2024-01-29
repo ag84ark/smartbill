@@ -23,4 +23,16 @@ class SeriesEndpoint extends BaseEndpoint
 
         return BaseApiResponse::fromArray($response);
     }
+
+    public function getCompanyVatCode(): string
+    {
+        return $this->companyVatCode;
+    }
+
+    public function setCompanyVatCode(string $companyVatCode): SeriesEndpoint
+    {
+        $this->companyVatCode = $companyVatCode;
+
+        return $this;
+    }
 }

@@ -15,11 +15,18 @@ class TaxesEndpoint extends BaseEndpoint
         parent::__construct($restClient);
     }
 
-    public function getTaxes()
+    public function getTaxes(): BaseApiResponse
     {
         $url = sprintf(self::TAXES_URL, $this->companyVatCode);
         $response = $this->rest_read($url);
 
         return BaseApiResponse::fromArray($response);
+    }
+
+    public function setCompanyVatCode(string $companyVatCode): TaxesEndpoint
+    {
+        $this->companyVatCode = $companyVatCode;
+
+        return $this;
     }
 }
