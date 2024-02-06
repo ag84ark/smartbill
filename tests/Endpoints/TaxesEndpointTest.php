@@ -42,4 +42,19 @@ class TaxesEndpointTest extends TestCase
 
         $this->taxesEndpoint->getTaxes();
     }
+
+    /** @test */
+    public function can_get_taxes_for_different_company_vat_code(): void
+    {
+        $this->taxesEndpoint->setCompanyVatCode('123456');
+        $this->assertEquals('123456', $this->taxesEndpoint->getCompanyVatCode());
+        $url = sprintf(BaseEndpoint::TAXES_URL, '123456');
+        $response = FakeApiResponse::generateFakeResponse(['taxes' => ['name' => 'Redusa', 'percentage' => 9]]);
+        $this->restClient->expects($this->once())
+            ->method('performHttpCall')
+            ->with(SmartBillCloudRestClient::HTTP_GET, $url)
+            ->willReturn($response->getServerResponseData());
+
+        $this->assertEquals(['name' => 'Redusa', 'percentage' => 9], $this->taxesEndpoint->getTaxes()->getResponseData()['taxes']);
+    }
 }

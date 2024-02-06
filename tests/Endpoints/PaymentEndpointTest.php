@@ -60,6 +60,11 @@ class PaymentEndpointTest extends TestCase
         $payment->method('toArray')
             ->willReturn(['key' => 'value']);
 
+        $this->paymentEndpoint->setCompanyVatCode('RO123456789');
+        $this->paymentEndpoint->setSeriesName('SSS');
+        $this->assertEquals('RO123456789', $this->paymentEndpoint->getCompanyVatCode());
+        $this->assertEquals('SSS', $this->paymentEndpoint->getSeriesName());
+
 
         $responseData = FakeApiResponse::generateFakeResponse(['number' => '0001', 'series' => 'TEST-INV']);
 
@@ -75,7 +80,8 @@ class PaymentEndpointTest extends TestCase
         $this->assertSame($responseData->toArray(), $this->paymentEndpoint->createPayment($payment)->toArray());
     }
 
-    public function testDeleteOtherPayment()
+    /** @test */
+    public function delete_other_payment()
     {
 
         $paymentData = new OtherPaymentDelete();
@@ -100,6 +106,47 @@ class PaymentEndpointTest extends TestCase
 
     }
 
+    /** @test */
+    public function it_cancels_a_payment(): void
+    {
+        $mockPaymentNumber = '12345';
+        $mockCancelResponse = FakeApiResponse::generateFakeResponse();
+
+        $expectedUrl = sprintf(BaseEndpoint::PAYMENT_URL . BaseEndpoint::PARAMS_CANCEL, config('smartbill.vatCode'), urlencode(config('smartbill.receiptSeries')), $mockPaymentNumber);
+
+        $this->restClient->expects($this->once())
+            ->method('performHttpCall')
+            ->with(SmartBillCloudRestClient::HTTP_PUT, $expectedUrl)
+            ->willReturn($mockCancelResponse->getServerResponseData());
+
+        $cancelResponse = $this->paymentEndpoint->cancelPayment($mockPaymentNumber);
+
+        $this->assertSame($mockCancelResponse->toArray(), $cancelResponse->toArray());
+    }
+
+    /** @test */
+    public function it_cancels_a_payment_for_other_company_vat_code(): void
+    {
+        $mockPaymentNumber = '12345';
+        $mockCancelResponse = FakeApiResponse::generateFakeResponse();
+
+        $this->paymentEndpoint->setCompanyVatCode('RO123456789');
+        $this->paymentEndpoint->setSeriesName('SSS');
+        $this->assertEquals('RO123456789', $this->paymentEndpoint->getCompanyVatCode());
+        $this->assertEquals('SSS', $this->paymentEndpoint->getSeriesName());
+
+        $expectedUrl = sprintf(BaseEndpoint::PAYMENT_URL . BaseEndpoint::PARAMS_CANCEL, 'RO123456789', urlencode('SSS'), $mockPaymentNumber);
+
+        $this->restClient->expects($this->once())
+            ->method('performHttpCall')
+            ->with(SmartBillCloudRestClient::HTTP_PUT, $expectedUrl)
+            ->willReturn($mockCancelResponse->getServerResponseData());
+
+        $cancelResponse = $this->paymentEndpoint->cancelPayment($mockPaymentNumber);
+
+        $this->assertSame($mockCancelResponse->toArray(), $cancelResponse->toArray());
+    }
+
     public function testCancelPayment(): void
     {
         $mockPaymentNumber = '12345';
@@ -115,5 +162,41 @@ class PaymentEndpointTest extends TestCase
         $cancelResponse = $this->paymentEndpoint->cancelPayment($mockPaymentNumber);
 
         $this->assertSame($mockCancelResponse->toArray(), $cancelResponse->toArray());
+    }
+
+    /** @test */
+    public function it_can_delete_a_receipt(): void
+    {
+        $mockReceiptNumber = '12345';
+        $mockDeleteResponse = FakeApiResponse::generateFakeResponse();
+
+        $expectedUrl = sprintf(BaseEndpoint::PAYMENT_URL . BaseEndpoint::PARAMS_DELETE_RECEIPT, config('smartbill.vatCode'), urlencode(config('smartbill.receiptSeries')), $mockReceiptNumber);
+
+        $this->restClient->expects($this->once())
+            ->method('performHttpCall')
+            ->with(SmartBillCloudRestClient::HTTP_DELETE, $expectedUrl)
+            ->willReturn($mockDeleteResponse->getServerResponseData());
+
+        $deleteResponse = $this->paymentEndpoint->deleteReceipt($mockReceiptNumber);
+
+        $this->assertSame($mockDeleteResponse->toArray(), $deleteResponse->toArray());
+    }
+
+    /** @test */
+    public function it_gets_details_fiscal_receipt(): void
+    {
+        $mockReceiptId = '12345';
+        $mockDetailsResponse = FakeApiResponse::generateFakeResponse(['message' => base64_encode('Some message')]);
+
+        $expectedUrl = sprintf(BaseEndpoint::PAYMENT_URL . BaseEndpoint::PARAMS_FISCAL_RECEIPT, config('smartbill.vatCode'), $mockReceiptId);
+
+        $this->restClient->expects($this->once())
+            ->method('performHttpCall')
+            ->with(SmartBillCloudRestClient::HTTP_GET, $expectedUrl)
+            ->willReturn($mockDetailsResponse->getServerResponseData());
+
+        $detailsResponse = $this->paymentEndpoint->detailsFiscalReceipt($mockReceiptId);
+
+        $this->assertSame(base64_decode($mockDetailsResponse->toArray()['message']), $detailsResponse->toArray()['message']);
     }
 }

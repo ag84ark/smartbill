@@ -27,6 +27,12 @@ class StockEndpointTest extends TestCase
         $this->taxesEndpoint->setWarehouseName('w1');
         $this->taxesEndpoint->setProductName('p1');
         $this->taxesEndpoint->setProductCode('pc1');
+
+        $this->assertEquals('2021-01-01', $this->taxesEndpoint->getDate());
+        $this->assertEquals('w1', $this->taxesEndpoint->getWarehouseName());
+        $this->assertEquals('p1', $this->taxesEndpoint->getProductName());
+        $this->assertEquals('pc1', $this->taxesEndpoint->getProductCode());
+
         $url = sprintf(BaseEndpoint::PRODUCTS_STOCK_URL, $this->getVatCode(), '2021-01-01', 'w1', 'p1', 'pc1');
         $response = FakeApiResponse::generateFakeResponse([
             'list' =>
@@ -55,6 +61,22 @@ class StockEndpointTest extends TestCase
     {
         $this->taxesEndpoint->setDate('2021-01-01');
         $url = sprintf(BaseEndpoint::PRODUCTS_STOCK_URL, $this->getVatCode(), '2021-01-01', '', '', '');
+        $this->restClient->expects($this->once())
+            ->method('performHttpCall')
+            ->with(SmartBillCloudRestClient::HTTP_GET, $url)
+            ->willReturn(FakeApiResponse::generateFakeResponse()->getServerResponseData());
+
+        $this->taxesEndpoint->getProductsStock();
+    }
+
+    /** @test */
+    public function can_use_a_different_company_vat_code()
+    {
+        $this->taxesEndpoint->setCompanyVatCode('RO123');
+        $this->assertEquals('RO123', $this->taxesEndpoint->getCompanyVatCode());
+        $this->taxesEndpoint->setDate('2021-01-01');
+
+        $url = sprintf(BaseEndpoint::PRODUCTS_STOCK_URL, 'RO123', '2021-01-01', '', '', '');
         $this->restClient->expects($this->once())
             ->method('performHttpCall')
             ->with(SmartBillCloudRestClient::HTTP_GET, $url)

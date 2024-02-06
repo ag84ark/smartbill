@@ -18,7 +18,7 @@ class TaxesEndpoint extends BaseEndpoint
     public function getTaxes(): BaseApiResponse
     {
         $url = sprintf(self::TAXES_URL, $this->companyVatCode);
-        $response = $this->rest_read($url);
+        $response = $this->rest_list($url);
 
         return BaseApiResponse::fromArray($response);
     }
@@ -28,5 +28,10 @@ class TaxesEndpoint extends BaseEndpoint
         $this->companyVatCode = $companyVatCode;
 
         return $this;
+    }
+
+    public function getCompanyVatCode(): string
+    {
+        return $this->companyVatCode;
     }
 }

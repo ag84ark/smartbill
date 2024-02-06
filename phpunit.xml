@@ -1,19 +1,8 @@
-
-<phpunit
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.3/phpunit.xsd"
-        backupGlobals="false"
-        bootstrap="vendor/autoload.php"
-        colors="true"
-        processIsolation="false"
-        stopOnFailure="false"
-        executionOrder="random"
-        failOnWarning="true"
-        failOnRisky="true"
-        failOnEmptyTestSuite="true"
-        beStrictAboutOutputDuringTests="true"
-        cacheDirectory=".phpunit.cache"
-        backupStaticProperties="false"
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
 >
     <php>
         <env name="SMARTBILL_VAT_CODE" value="RO123456789"/>
@@ -22,15 +11,15 @@
     </php>
     <testsuites>
         <testsuite name="Feature">
-            <directory suffix="Test.php">./tests/Helpers</directory>
+            <directory suffix="Test.php">tests/Helpers</directory>
         </testsuite>
         <testsuite name="Unit">
-            <directory suffix="Test.php">./tests/Endpoints</directory>
+            <directory suffix="Test.php">tests/Endpoints</directory>
         </testsuite>
     </testsuites>
-    <source>
+    <coverage processUncoveredFiles="true">
         <include>
-            <directory suffix=".php">./src</directory>
+            <directory suffix=".php">src</directory>
         </include>
-    </source>
+    </coverage>
 </phpunit>

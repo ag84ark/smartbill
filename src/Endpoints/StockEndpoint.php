@@ -28,7 +28,7 @@ class StockEndpoint extends BaseEndpoint
     public function getProductsStock(): BaseApiResponse
     {
         $url = sprintf(self::PRODUCTS_STOCK_URL, $this->companyVatCode, $this->date, $this->warehouseName, $this->productName, $this->productCode);
-        $response = $this->rest_read($url);
+        $response = $this->rest_list($url);
 
         return BaseApiResponse::fromArray($response);
     }

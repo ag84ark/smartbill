@@ -55,4 +55,20 @@ class SeriesEndpointTests extends TestCase
         $this->assertEquals($response->toArray(), $this->seriesEndpoint->getSeries("f")->toArray());
 
     }
+
+    /** @test */
+    public function it_retrieves_series_for_other_company_vat_code(): void
+    {
+        $this->seriesEndpoint->setCompanyVatCode('RO234');
+        $this->assertEquals('RO234', $this->seriesEndpoint->getCompanyVatCode());
+
+        $url = sprintf(BaseEndpoint::SERIES_URL, 'RO234', '');
+        $response = FakeApiResponse::generateFakeResponse(['list' => ['name' => 'test', 'nextNumber' => 1, 'type' => 'f']]);
+        $this->restClient->expects($this->once())
+            ->method('performHttpCall')
+            ->with(SmartBillCloudRestClient::HTTP_GET, $url)
+            ->willReturn($response->getServerResponseData());
+
+        $this->assertEquals($response->toArray(), $this->seriesEndpoint->getSeries()->toArray());
+    }
 }

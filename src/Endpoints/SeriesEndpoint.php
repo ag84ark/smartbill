@@ -19,7 +19,7 @@ class SeriesEndpoint extends BaseEndpoint
     {
         $documentType = ! empty($documentType) ? substr($documentType, 0, 1) : $documentType; // take the 1st character
         $url = sprintf(self::SERIES_URL, $this->companyVatCode, $documentType);
-        $response = $this->rest_read($url);
+        $response = $this->rest_list($url);
 
         return BaseApiResponse::fromArray($response);
     }
